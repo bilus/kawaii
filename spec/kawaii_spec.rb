@@ -9,3 +9,5 @@ describe Kawaii do
     expect(false).to eq(true)
   end
 end
+
+

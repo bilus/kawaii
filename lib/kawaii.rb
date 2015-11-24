@@ -1,5 +1,12 @@
-require "kawaii/version"
+require 'kawaii/version'
+require 'rack/response'
 
 module Kawaii
-  # Your code goes here...
+  class Base
+    def call(env)
+      res = Rack::Response.new
+      res.write "Hello, world"
+      res.finish
+    end
+  end
 end

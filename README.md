@@ -39,3 +39,22 @@ Bug reports and pull requests are welcome on GitHub at https://github.com/[USERN
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+
+## TODO
+
++ Hello world app.
+- String `get` routes are evaluated in the order they are defined in an App.
+- String and hash responses.
+- Nested routes
+- Parameter-based routes.
+- Wildcard regex routes, e.g. '/foo/bar/?'.
+- References to blocks.
+- Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
+- Globally defined routes (in multiple files).
+- Gem, Readme, API reference.
+- Example project.
+- Rubocop-compliant.
+- Rack/custom global middleware.
+- Route-specific middleware.
+- Rack route test helpers.
+- Custom error handling (intercept exceptions, 404 what else?).
