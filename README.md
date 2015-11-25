@@ -50,14 +50,14 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Top-level routes.
 + Example for top-level routes.
 + Nested routes.
-- Modular apps (multiple modules via config.ru).
++ Modular apps (multiple modules via config.ru).
+- Matchers.
+- Wildcard regex routes, e.g. '/foo/bar/?'.
 - Other HTTP verbs.
-- Refactor.
-
 
 - String and hash responses.
 - Parameter-based routes.
-- Wildcard regex routes, e.g. '/foo/bar/?'.
+
 - References to blocks (procs) in route definitions.
 - Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
 - Gem, Readme, API reference.

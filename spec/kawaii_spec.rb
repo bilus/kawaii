@@ -61,12 +61,12 @@ describe Kawaii do
   describe 'nested routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
-        namespace '/foo' do
+        context '/foo' do
           get '/' do
             text('Hello, world')
           end
 
-          namespace '/bar' do
+          context '/bar' do
             get '/' do
               text('Foo bar')
             end

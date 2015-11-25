@@ -17,9 +17,9 @@ module Kawaii
       @block = block
     end
     
-    def matches?(request)
-      puts "matches? #{@path} #{request.path_info}" 
-      @path == request.path_info
+    def matches?(env)
+      puts "matches? #{@path} #{env[Rack::PATH_INFO]}" 
+      @path == env[Rack::PATH_INFO]
     end
 
     def call(env)
@@ -50,24 +50,35 @@ module Kawaii
     end
   end
 
+  class RouteContext
+    def initialize(*paths, app)
+      @paths = paths
+      @app = app
+    end
+
+    def get(path, &block)
+      @app.add_route!(Rack::GET, *@paths, path, &block) 
+    end
+
+    def context(path, &block)
+      RouteContext.new(*@paths, path, @app).instance_eval(&block)
+    end
+  end
+  
   class Base
     def initialize(downstream_app = nil) # TODO: Downstream app.
     end
     
     def call(env)
-      matching = self.class.find_route(env) || not_found
+      matching = self.class.match(env) || not_found
       matching.call(env)
     end
 
     class << self
       include ServerMethods
 
-      def namespace(path, &block)
-        @parent_paths ||= []
-        @parent_paths.push(path)
-        block.call
-      ensure
-        @parent_paths.pop
+      def context(path, &block)
+        RouteContext.new(path, self).instance_eval(&block)
       end
       
       def get(path, &block)
@@ -80,19 +91,16 @@ module Kawaii
         @app.call(env)
       end
       
-      def find_route(env)
+      def match(env)
         ensure_routes!
-        request = Rack::Request.new(env)
-        puts "find_route #{self.inspect} #{request.inspect}"
-        @routes[request.request_method].find {|r| r.matches?(request)}
+        puts "match #{self.inspect} #{env.inspect}"
+        @routes[env[Rack::REQUEST_METHOD]].find {|r| r.matches?(env)}
       end
 
-      protected
-      
-      def add_route!(method, path, &block)
+      def add_route!(method, *paths, &block)
         puts "add_route! #{self.inspect}"
         ensure_routes!
-        @routes[method] << Route.new(*@parent_paths, path, &block)
+        @routes[method] << Route.new(*paths, &block)
       end
 
       def ensure_routes!
@@ -145,8 +153,8 @@ class << self
     Kawaii::SingletonApp.get(*args, &block)
   end
 
-  def namespace(*args, &block)
-    Kawaii::SingletonApp.namespace(*args, &block)
+  def context(*args, &block)
+    Kawaii::SingletonApp.context(*args, &block)
   end
 end
 
