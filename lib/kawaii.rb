@@ -26,18 +26,50 @@ module Kawaii
       @block.call
     end
   end
-  
+
+  module ServerMethods
+    def start! # TODO: Support other handlers http://www.rubydoc.info/github/rack/rack/Rack/Handler
+      Rack::Handler.get("WEBrick").run(self, :Port => 8092) do |s| # TODO: Hard-coded port number.
+        @server = s
+        at_exit {  stop! }
+        [:INT, :TERM].each do |signal|
+          old = trap(signal) do
+            stop!
+            old.call if old.respond_to?(:call)
+          end
+        end
+      end
+    end
+
+    def stop!
+      @server.stop if @server # NOTE: WEBrick-specific
+    end
+
+    def running?
+      !@server.nil?
+    end
+  end
+
   class Base
     def initialize(downstream_app = nil) # TODO: Downstream app.
     end
     
     def call(env)
       matching = self.class.find_route(env) || not_found
-      p matching
       matching.call(env)
     end
 
     class << self
+      include ServerMethods
+
+      def namespace(path, &block)
+        @parent_paths ||= []
+        @parent_paths.push(path)
+        block.call
+      ensure
+        @parent_paths.pop
+      end
+      
       def get(path, &block)
         add_route!(Rack::GET, path, &block) 
       end
@@ -46,30 +78,6 @@ module Kawaii
       def call(env)
         @app ||= self.new
         @app.call(env)
-      end
-
-      def start! # TODO: Support other handlers http://www.rubydoc.info/github/rack/rack/Rack/Handler
-        Rack::Handler.get("WEBrick").run(self, :Port => 8092) do |s| # TODO: Hard-coded port number.
-          @server = s
-          at_exit {  stop! }
-          [:INT, :TERM].each do |signal|
-            old = trap(signal) do
-              stop!
-              old.call if old.respond_to?(:call)
-            end
-          end
-        end
-      end
-
-      def stop!
-        if @server
-          puts "Stopping..."
-          @server.stop # NOTE: WEBrick-specific
-        end
-      end
-
-      def running?
-        !@server.nil?
       end
       
       def find_route(env)
@@ -124,6 +132,14 @@ module Kawaii
   end
 end
 
+# Helpers to use directly in a .rb file without using a class inheriting from Kawaii::Base
+#
+# Example
+#
+# get '/' do
+#    'Hello, world'
+# end
+
 class << self
   # TODO: Use define_method
   def get(*args, &block)
@@ -131,6 +147,8 @@ class << self
   end
 end
 
+
+# For self-contained execution without config.ru.
 Kawaii::SingletonApp.maybe_start!
 
 
