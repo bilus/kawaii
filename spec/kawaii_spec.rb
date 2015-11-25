@@ -11,7 +11,7 @@ describe Kawaii do
     expect(Kawaii::VERSION).not_to be nil
   end
   
-  describe 'routes' do
+  describe 'simple routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
         get '/' do
@@ -44,20 +44,48 @@ describe Kawaii do
       expect(last_response.body).to include('Good bye')
     end
 
-    it '404s when no routes are matched' do
-      get '/foobar'
-      expect(last_response).to be_not_found
-    end
-
     it 'evaluates in the order routes appear' do
       get '/ambiguous'
       expect(last_response.body).to include('first route')      
     end
 
-    context 'missing route' do
+    describe 'missing route' do
       it "passes to downstream middleware if present"
-      it "responds with 404 if last in chain"
+      it "responds with 404 if last in chain" do
+        get '/foobar'
+        expect(last_response).to be_not_found
+      end
     end
+
+  end
+  describe 'nested routes' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        namespace '/foo' do
+          get '/' do
+            text('Hello, world')
+          end
+
+          namespace '/bar' do
+            get '/' do
+              text('Foo bar')
+            end
+          end
+        end
+      end
+    end
+
+    it 'handles one level of nesting' do
+      get '/foo/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('Hello')
+    end
+    
+    it 'handles two levels of nesting' do
+      get '/foo/bar/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('Foo')
+    end    
   end
 end
 

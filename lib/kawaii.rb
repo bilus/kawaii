@@ -12,8 +12,8 @@ module Kawaii
   end
 
   class Route
-    def initialize(path, &block)
-      @path = path
+    def initialize(*paths, &block)
+      @path = File.join(*paths)
       @block = block
     end
     
@@ -92,7 +92,7 @@ module Kawaii
       def add_route!(method, path, &block)
         puts "add_route! #{self.inspect}"
         ensure_routes!
-        @routes[method] << Route.new(path, &block)
+        @routes[method] << Route.new(*@parent_paths, path, &block)
       end
 
       def ensure_routes!
@@ -144,6 +144,10 @@ class << self
   # TODO: Use define_method
   def get(*args, &block)
     Kawaii::SingletonApp.get(*args, &block)
+  end
+
+  def namespace(*args, &block)
+    Kawaii::SingletonApp.namespace(*args, &block)
   end
 end
 

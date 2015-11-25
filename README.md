@@ -49,7 +49,7 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Support for running apps without config.ru (ruby -I ./lib examples/hello_world.rb
 + Top-level routes.
 + Example for top-level routes.
-- Nested routes. Example.
++ Nested routes.
 - Modular apps (multiple modules via config.ru).
 - Other HTTP verbs.
 - Refactor.
