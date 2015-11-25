@@ -18,8 +18,8 @@ module Kawaii
     end
     
     def matches?(request)
-      puts "matches? #{@path} #{request.path}" 
-      @path == request.path
+      puts "matches? #{@path} #{request.path_info}" 
+      @path == request.path_info
     end
 
     def call(env)
@@ -106,7 +106,6 @@ module Kawaii
       lambda { |env| [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['Not found']] }
     end
   end
-
 
   class SingletonApp < Base
     class << self
