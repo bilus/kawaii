@@ -7,7 +7,6 @@ def text(s)
 end
 
 describe Kawaii do
-  
   it 'has a version number' do
     expect(Kawaii::VERSION).not_to be nil
   end
@@ -22,7 +21,15 @@ describe Kawaii do
         get '/bye' do
           text('Good bye')
         end
-      end.new
+
+        get '/ambiguous' do
+          text('first route')
+        end
+        
+        get '/ambiguous' do
+          text('second route')
+        end
+      end
     end
     
     it 'renders a welcome page' do
@@ -40,6 +47,11 @@ describe Kawaii do
     it '404s when no routes are matched' do
       get '/foobar'
       expect(last_response).to be_not_found
+    end
+
+    it 'evaluates in the order routes appear' do
+      get '/ambiguous'
+      expect(last_response.body).to include('first route')      
     end
 
     context 'missing route' do
