@@ -1,3 +1,4 @@
+
 # Kawaii
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/kawaii`. To experiment with that code, run `bin/console` for an interactive prompt.
@@ -43,14 +44,18 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## TODO
 
 + Hello world app.
++ Specs for the app.
++ GET routes inside a class deriving from Base.
+- Top-level routes.
+- Nested routes.
+
 - String `get` routes are evaluated in the order they are defined in an App.
+- Other HTTP verbs.
 - String and hash responses.
-- Nested routes
 - Parameter-based routes.
 - Wildcard regex routes, e.g. '/foo/bar/?'.
 - References to blocks.
 - Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
-- Globally defined routes (in multiple files).
 - Gem, Readme, API reference.
 - Example project.
 - Rubocop-compliant.
