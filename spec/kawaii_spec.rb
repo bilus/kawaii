@@ -203,6 +203,23 @@ describe Kawaii do
       expect(last_response.body).to include('bar')
     end
   end
+
+  describe 'parameters' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get '/users/:user_id/posts/:post_id/?' do
+          text("#{params[:user_id]}-#{params[:post_id]}")
+        end
+      end
+    end
+
+    it 'extracts paraters from path' do
+      get '/users/123/posts/567'
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq('123-567')
+    end
+    
+  end
 end
 
 

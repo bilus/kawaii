@@ -55,11 +55,11 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Modular apps (multiple modules via config.ru).
 + Matchers.
 + Wildcard regex routes, e.g. '/foo/bar/?'.
++ Parameter-based routes. Unsupported in 'context'.
+
+- String responses.
+- Request object.
 - Other HTTP verbs.
-
-- String and hash responses.
-- Parameter-based routes.
-
 - Views.
 - References to blocks (procs) in route definitions.
 - Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController

@@ -5,9 +5,11 @@ module Kawaii
 
   class Match
     attr_reader :remaining_path
+    attr_reader :params
     
-    def initialize(remaining_path)
+    def initialize(remaining_path, params = {})
       @remaining_path = remaining_path
+      @params = params
     end
   end
 
@@ -44,20 +46,30 @@ module Kawaii
     end
     
     def match(path)
-      puts "StringMatcher#match #{path} #{@rx}"
-      remaining_path = path.match(@rx).to_a.last
-      Match.new(remaining_path) if remaining_path
+      m = path.match(@rx)
+      puts "StringMatcher#match #{path} #{@rx} #{match_to_params(m) if m} #{m.to_a.inspect if m}"
+      Match.new(remaining_path(path, m), match_to_params(m)) if m
     end
 
     protected
 
     def compile(path)
-      prep_path = path.gsub('*', '.*')
-      Regexp.new("^#{prep_path}(.*)")
+      prep_path = path.gsub('*', '.*').gsub(/\/\:([^\/]+)/, '/(?<\1>[^\/]+)')
+      Regexp.new("^#{prep_path}")
+    end
+
+    def remaining_path(path, m)
+      _, start = m.offset(0) # Whole match.
+      path[start..-1]
+    end
+    
+    def match_to_params(m)
+      m.names.reduce({}) {|params, name| params[name.to_sym] = m[name]; params}
     end
   end
 
   class RegexpMatcher
+    # TODO: Support parameters based on named capture groups.
     def initialize(rx)
       @rx = rx
     end
@@ -74,27 +86,33 @@ module Kawaii
     end
 
     def match(path)
-      new_path = @matcher.match(path)
-      puts "FullMatcher#match #{path} #{new_path} #{@matcher.inspect}"
-      new_path if new_path && new_path.remaining_path == ""
+      m = @matcher.match(path)
+      puts "FullMatcher#match #{path} #{m.remaining_path if m} #{@matcher.inspect}"
+      m if m && m.remaining_path == ""
     end
   end
   
   # A single route. Provides matching while behaving like a regular Rack app (Route#call).
   #
   class Route
+    attr_reader :params # TODO: Extract RouteHandler class.
+    
     def initialize(path, &block)
       @matcher = Matcher.compile(path, full_match: true)
       @block = block
     end
     
     def match(env)
-      puts "Route#match #{@matcher} #{env[Rack::PATH_INFO]}" 
-      self if @matcher.match(env[Rack::PATH_INFO])
+      puts "Route#match #{@matcher} #{env[Rack::PATH_INFO]}"
+      match = @matcher.match(env[Rack::PATH_INFO])
+      if match
+        @params = match.params
+        self
+      end
     end
 
     def call(env)
-      @block.call
+      self.instance_eval(&@block)
     end
   end
 
