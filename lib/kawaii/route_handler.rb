@@ -29,13 +29,19 @@ module Kawaii
       process_response(self.instance_eval(&@block))
     end
 
+    # @todo Layouts.
+    def render(tmpl)
+      t = Tilt.new(File.join('views', tmpl)) # @todo Caching!
+      t.render(self)
+    end
+
     protected
 
     def process_response(response)
       if response.is_a?(String)
         [200,
          {Rack::CONTENT_TYPE => 'text/html',
-          Rack::CONTENT_LENGTH => response.size},
+          Rack::CONTENT_LENGTH => response.size.to_s},
          [response]]
       else
         response

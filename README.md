@@ -61,13 +61,15 @@ The gem is available as open source under the terms of the [MIT License](http://
 + String responses.
 + Other HTTP verbs.
 + Refactor & create individual files.
-- Views.
-- References to blocks (procs) in route definitions.
++ Views (via `render` method in handlers) using Tilt.
++ Rack route test helpers work.
++ API reference.
+- Check: References to blocks (procs) in route definitions.
 - Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
-- Gem, Readme, API reference.
+- Readme - description and tutorial.
+- Push gem.
 - Example project using the gem.
 - Rubocop-compliant.
 - Rack/custom global middleware.
 - Route-specific middleware.
-- Rack route test helpers work.
 - Custom error handling (intercept exceptions, 404 what else?).

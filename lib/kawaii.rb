@@ -1,5 +1,6 @@
 require 'kawaii/version'
 require 'rack'
+require 'tilt'
 require 'kawaii/core_ext/hash'
 require 'kawaii/matchers'
 require 'kawaii/route_handler'
