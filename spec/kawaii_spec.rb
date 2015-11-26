@@ -208,7 +208,8 @@ describe Kawaii do
     let(:app) do
       Class.new(Kawaii::Base) do
         get '/users/:user_id/posts/:post_id/?' do
-          text("#{params[:user_id]}-#{params[:post_id]}")
+          p request.params
+          text("#{params[:user_id]}-#{params[:post_id]}-#{params[:username]}")
         end
       end
     end
@@ -216,7 +217,13 @@ describe Kawaii do
     it 'extracts paraters from path' do
       get '/users/123/posts/567'
       expect(last_response).to be_ok
-      expect(last_response.body).to eq('123-567')
+      expect(last_response.body).to include('123-567')
+    end
+
+    it 'merges params from request' do
+      get '/users/123/posts/567', username: "username"
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('username')
     end
   end
 
@@ -229,7 +236,7 @@ describe Kawaii do
       end
     end
 
-    it 'extracts paraters from path' do
+    it 'passes `request` object to route handler' do
       get '/foo'
       expect(last_response).to be_ok
       expect(last_response.body).to eq('/foo')

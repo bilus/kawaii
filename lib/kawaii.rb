@@ -1,6 +1,20 @@
 require 'kawaii/version'
 require 'rack'
 
+class Hash
+  def update_keys
+    result = self.class.new
+    each_key do |key|
+      result[yield(key)] = self[key]
+    end
+    result
+  end
+
+  def symbolize_keys
+    update_keys(&:to_sym)
+  end
+end
+
 module Kawaii
 
   class Match
@@ -103,7 +117,7 @@ module Kawaii
 
     def call(env)
       @request = Rack::Request.new(env)
-      @params = @path_params
+      @params = @path_params.merge(@request.params.symbolize_keys)
       self.instance_eval(&@block)
     end
   end
