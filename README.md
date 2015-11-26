@@ -56,9 +56,10 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Matchers.
 + Wildcard regex routes, e.g. '/foo/bar/?'.
 + Parameter-based routes. Unsupported in 'context'.
+- Request object.
+- Request params.
 
 - String responses.
-- Request object.
 - Other HTTP verbs.
 - Views.
 - References to blocks (procs) in route definitions.

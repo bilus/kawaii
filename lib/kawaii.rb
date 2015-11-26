@@ -91,28 +91,35 @@ module Kawaii
       m if m && m.remaining_path == ""
     end
   end
+
+  class RouteHandler
+    attr_reader :params
+    attr_reader :request
+    
+    def initialize(path_params, &block)
+      @path_params = path_params
+      @block = block
+    end
+
+    def call(env)
+      @request = Rack::Request.new(env)
+      @params = @path_params
+      self.instance_eval(&@block)
+    end
+  end
   
   # A single route. Provides matching while behaving like a regular Rack app (Route#call).
   #
   class Route
-    attr_reader :params # TODO: Extract RouteHandler class.
-    
     def initialize(path, &block)
       @matcher = Matcher.compile(path, full_match: true)
       @block = block
     end
     
     def match(env)
-      puts "Route#match #{@matcher} #{env[Rack::PATH_INFO]}"
       match = @matcher.match(env[Rack::PATH_INFO])
-      if match
-        @params = match.params
-        self
-      end
-    end
-
-    def call(env)
-      self.instance_eval(&@block)
+      puts "Route#match #{@matcher} #{env[Rack::PATH_INFO]} #{match.inspect}"
+      RouteHandler.new(match.params, &@block) if match
     end
   end
 
