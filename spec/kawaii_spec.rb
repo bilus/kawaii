@@ -218,6 +218,22 @@ describe Kawaii do
       expect(last_response).to be_ok
       expect(last_response.body).to eq('123-567')
     end
+  end
+
+  describe 'request object' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get '/foo/?' do
+          text(request.path_info)
+        end
+      end
+    end
+
+    it 'extracts paraters from path' do
+      get '/foo'
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq('/foo')
+    end
     
   end
 end
