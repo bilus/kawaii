@@ -85,7 +85,77 @@ describe Kawaii do
       get '/foo/bar/'
       expect(last_response).to be_ok
       expect(last_response.body).to include('Foo')
-    end    
+    end
+
+    it 'handles missing slashes'
+  end
+
+  it 'handles trailing slashes'
+
+  describe 'regex routes' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get /\/|hello/ do
+          text('Hello, world')
+        end
+
+        context /\/foo/ do
+          get /\/bar/ do
+            text('bar')
+          end
+        end
+      end
+    end
+    
+    it 'renders a welcome page' do
+      get '/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('Hello')    
+      get '/hello'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('Hello')    
+    end
+
+    it 'works with contexts' do
+      get '/foo/bar'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('bar')
+    end
+
+    it "responds with 404 if last in chain" do
+      get '/whatever'
+      expect(last_response).to be_not_found
+    end
+  end
+ 
+  describe 'custom route matchers' do
+    class FooMatcher < Kawaii::Matcher
+      def match(path)
+        puts "FooMatcher#match #{path}"
+        if path == '/foo'
+          Kawaii::Match.new('')
+        end
+      end
+    end
+
+
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get FooMatcher.new do
+          text('foo')
+        end
+        
+        get '/bar' do
+          text('bar')
+        end
+      end
+    end      
+    it 'matches paths starting from /foo' do
+      get '/foo'
+      expect(last_response.body).to include('foo')
+      get '/bar'
+      expect(last_response.body).to include('bar')
+    end
   end
 end
 

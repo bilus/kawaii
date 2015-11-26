@@ -1,18 +1,88 @@
-# require 'kawaii/version'
+require 'kawaii/version'
 require 'rack'
 
 module Kawaii
+
+  class Match
+    attr_reader :remaining_path
+    
+    def initialize(remaining_path)
+      @remaining_path = remaining_path
+    end
+  end
+
+  class Matcher
+    # Creates a matcher.
+    def self.compile(x, options = {})
+      # TODO: Make it extendable?
+      matcher = if x.is_a?(String)
+                  StringMatcher.new(x)
+                elsif x.is_a?(Regexp)
+                  RegexpMatcher.new(x)
+                elsif x.is_a?(Matcher)
+                  x
+                else
+                  raise RuntimeException, "#{x} is not a supported matcher"
+                end
+      if options[:full_match]
+        FullMatcher.new(matcher) # Require path to fully match.
+      else
+        matcher
+      end
+    end
+    
+    # Returns Match if the beginning of path does match or nil if there is no match.
+    # See `Match`.
+    def match(path)
+      # Implement in deriving classes.
+    end
+  end
+
+  class StringMatcher
+    def initialize(path)
+      @rx = Regexp.new("^#{path}(.*)")
+    end
+    
+    def match(path)
+      remaining_path = path.match(@rx).to_a.last
+      Match.new(remaining_path) if remaining_path
+    end
+  end
+
+  class RegexpMatcher
+    def initialize(rx)
+      @rx = rx
+    end
+
+    def match(path)
+      new_path = path.gsub(@rx, "")
+      Match.new(new_path) if path != new_path
+    end
+  end
+
+  class FullMatcher
+    def initialize(matcher)
+      @matcher = matcher
+    end
+
+    def match(path)
+      new_path = @matcher.match(path)
+      puts "FullMatcher#match #{path} #{new_path} #{@matcher.inspect}"
+      new_path if new_path && new_path.remaining_path == ""
+    end
+  end
+  
   # A single route. Provides matching while behaving like a regular Rack app (Route#call).
   #
   class Route
     def initialize(path, &block)
-      @path = path
+      @matcher = Matcher.compile(path, full_match: true)
       @block = block
     end
     
     def match(env)
-      puts "Route#match #{@path} #{env[Rack::PATH_INFO]}" 
-      self if @path == env[Rack::PATH_INFO]
+      puts "Route#match #{@matcher} #{env[Rack::PATH_INFO]}" 
+      self if @matcher.match(env[Rack::PATH_INFO])
     end
 
     def call(env)
@@ -88,9 +158,9 @@ module Kawaii
 
     protected
 
-    def add_route!(method, router)
+    def add_route!(method, route)
       puts "add_route! #{self.inspect}"
-      @routes[method] << router 
+      @routes[method] << route
     end
   end
 
@@ -112,20 +182,14 @@ module Kawaii
   class RouteContext < Router
     def initialize(path)
       super()
-      @path = path
+      @matcher = Matcher.compile(path, starts_with: true)
     end
 
     def match(env)
-      puts "RouteContext#match #{self.inspect} #{env.inspect}"
-      remaining_path = match_path(env[Rack::PATH_INFO])
-      if remaining_path
-        super(env.merge(Rack::PATH_INFO => remaining_path))
-      end
-    end
+      m = @matcher.match(env[Rack::PATH_INFO])
+      puts "RouteContext#match #{env[Rack::PATH_INFO].inspect} #{@matcher.inspect} #{m.inspect}"
 
-    def match_path(path_info)
-      compiled_path = Regexp.new("^#{@path}(.*)")
-      path_info.match(compiled_path).to_a.last
+      super(env.merge(Rack::PATH_INFO => m.remaining_path)) if m
     end
   end
 
