@@ -60,7 +60,7 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Merge Rack Request params.
 + String responses.
 + Other HTTP verbs.
-- Refactor & create individual files.
++ Refactor & create individual files.
 - Views.
 - References to blocks (procs) in route definitions.
 - Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController

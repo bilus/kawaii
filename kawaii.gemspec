@@ -34,4 +34,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard-rspec"
   spec.add_development_dependency "rack-test"
+  spec.add_development_dependency "yard"
 end
