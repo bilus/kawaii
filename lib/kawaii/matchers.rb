@@ -4,10 +4,12 @@ module Kawaii
   class Match
     # Whatever is left of the path after {Matcher#match} consumed the matching portion.
     attr_reader :remaining_path
-    # Hash containing params extracted from path similar to: /users/:user_id/posts/:post_id
+    # Hash containing params extracted from paths such as /users/:user_id/posts/:post_id
     attr_reader :params
 
-    # Creates 
+    # Creates a new match result.
+    # @param remaining_path [String] what is left of the actual path after {Matcher#match} consumed the matching portion
+    # @param params [Hash] params extracted from paths such as /users/:id
     def initialize(remaining_path, params = {})
       @remaining_path = remaining_path
       @params = params
