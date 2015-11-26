@@ -53,19 +53,20 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Example for top-level routes.
 + Nested routes.
 + Modular apps (multiple modules via config.ru).
-- Matchers.
-- Wildcard regex routes, e.g. '/foo/bar/?'.
++ Matchers.
++ Wildcard regex routes, e.g. '/foo/bar/?'.
 - Other HTTP verbs.
 
 - String and hash responses.
 - Parameter-based routes.
 
+- Views.
 - References to blocks (procs) in route definitions.
 - Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
 - Gem, Readme, API reference.
-- Example project.
+- Example project using the gem.
 - Rubocop-compliant.
 - Rack/custom global middleware.
 - Route-specific middleware.
-- Rack route test helpers.
+- Rack route test helpers work.
 - Custom error handling (intercept exceptions, 404 what else?).

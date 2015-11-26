@@ -40,12 +40,20 @@ module Kawaii
 
   class StringMatcher
     def initialize(path)
-      @rx = Regexp.new("^#{path}(.*)")
+      @rx = compile(path)
     end
     
     def match(path)
+      puts "StringMatcher#match #{path} #{@rx}"
       remaining_path = path.match(@rx).to_a.last
       Match.new(remaining_path) if remaining_path
+    end
+
+    protected
+
+    def compile(path)
+      prep_path = path.gsub('*', '.*')
+      Regexp.new("^#{prep_path}(.*)")
     end
   end
 
@@ -135,7 +143,16 @@ module Kawaii
   # end
   #
   class Router
-    ANY_METHOD = :any
+    HTTP_METHODS = ['GET'.freeze,
+                    'POST'.freeze,
+                    'PUT'.freeze,
+                    'PATCH'.freeze,
+                    'DELETE'.freeze,
+                    'HEAD'.freeze,
+                    'OPTIONS'.freeze,
+                    'LINK'.freeze,
+                    'UNLINK'.freeze,
+                    'TRACE'.freeze]
     
     def initialize
       @routes = Hash.new {|h, k| h[k] = []}
@@ -147,19 +164,32 @@ module Kawaii
 
     def context(path, &block)
       ctx = RouteContext.new(path)
-      add_route!(Router::ANY_METHOD, ctx)
+      # TODO: Is there a better way to keep ordering of routes?
+      # An alternative would be to enter each route in a context only once (with 'prefix' based
+      # on containing contexts).
+      # On the other hand, we're only doing that when compiling routes, further processing is
+      # faster this way.
       ctx.instance_eval(&block)
+      p self
+      ctx.methods_used.each do |meth|
+        add_route!(meth, ctx)
+      end
+
     end
     
     def match(env)
-      all_routes = @routes[env[Rack::REQUEST_METHOD]] + @routes[ANY_METHOD] # TODO: Performance.
-      all_routes.lazy.map {|r| r.match(env)}.find {|r| !r.nil?} # Lazy to avoid unnecessary calls to #match.
+      puts "Router#match #{env[Rack::PATH_INFO]} #{env[Rack::REQUEST_METHOD]} #{@routes[env[Rack::REQUEST_METHOD]]}"
+      @routes[env[Rack::REQUEST_METHOD]].lazy.map {|r| r.match(env)}.find {|r| !r.nil?} # Lazy to avoid unnecessary calls to #match.
     end
 
     protected
 
+    def methods_used
+      @routes.keys
+    end
+
     def add_route!(method, route)
-      puts "add_route! #{self.inspect}"
+      puts "add_route! #{method} #{route.inspect}"
       @routes[method] << route
     end
   end
@@ -189,7 +219,17 @@ module Kawaii
       m = @matcher.match(env[Rack::PATH_INFO])
       puts "RouteContext#match #{env[Rack::PATH_INFO].inspect} #{@matcher.inspect} #{m.inspect}"
 
-      super(env.merge(Rack::PATH_INFO => m.remaining_path)) if m
+      super(env.merge(Rack::PATH_INFO => ensure_leading_slash(m.remaining_path))) if m
+    end
+
+    protected
+
+    def ensure_leading_slash(path)
+      if path.start_with?('/')
+        path
+      else
+        '/' + path
+      end
     end
   end
 

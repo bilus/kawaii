@@ -87,6 +87,8 @@ describe Kawaii do
       expect(last_response.body).to include('Foo')
     end
 
+    it 'handles different http methods'
+    
     it 'handles missing slashes'
   end
 
@@ -127,7 +129,51 @@ describe Kawaii do
       expect(last_response).to be_not_found
     end
   end
- 
+
+  describe 'wildcard routes' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get "/hello/?" do
+          text('Hello, world')
+        end
+
+        context "/foo/?" do
+          get "/bar/?" do
+            text('bar')
+          end
+        end
+
+        get "/*" do
+          text('whatever')
+        end
+      end
+    end
+    
+    it 'renders a welcome page' do
+      get '/hello/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('Hello')    
+      get '/hello'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('Hello')    
+    end
+
+    it 'works with contexts' do
+      get '/foo/bar'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('bar')
+      get '/foo/bar/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('bar')
+    end
+
+    it 'handles stars' do
+      get '/whatever'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('whatever')
+    end
+  end
+    
   describe 'custom route matchers' do
     class FooMatcher < Kawaii::Matcher
       def match(path)
