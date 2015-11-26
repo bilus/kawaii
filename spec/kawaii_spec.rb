@@ -1,9 +1,7 @@
 require 'spec_helper'
 
 def text(s)
-  res = Rack::Response.new
-  res.write(s)
-  res.finish
+  s # String responses are supported directly.
 end
 
 describe Kawaii do
@@ -241,7 +239,6 @@ describe Kawaii do
       expect(last_response).to be_ok
       expect(last_response.body).to eq('/foo')
     end
-    
   end
 end
 

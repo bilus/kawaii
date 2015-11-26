@@ -118,7 +118,20 @@ module Kawaii
     def call(env)
       @request = Rack::Request.new(env)
       @params = @path_params.merge(@request.params.symbolize_keys)
-      self.instance_eval(&@block)
+      process_response(self.instance_eval(&@block))
+    end
+
+    protected
+
+    def process_response(response)
+      if response.is_a?(String)
+        [200,
+         {Rack::CONTENT_TYPE => 'text/html',
+          Rack::CONTENT_LENGTH => response.size},
+         [response]]
+      else
+        response
+      end
     end
   end
   
