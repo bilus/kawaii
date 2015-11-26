@@ -195,23 +195,17 @@ module Kawaii
   # end
   #
   class Router
-    HTTP_METHODS = ['GET'.freeze,
-                    'POST'.freeze,
-                    'PUT'.freeze,
-                    'PATCH'.freeze,
-                    'DELETE'.freeze,
-                    'HEAD'.freeze,
-                    'OPTIONS'.freeze,
-                    'LINK'.freeze,
-                    'UNLINK'.freeze,
-                    'TRACE'.freeze]
-    
+    # Based on https://github.com/rack/rack/blob/master/lib/rack.rb#L48
+    HTTP_METHODS = [:get, :post, :put, :patch, :delete, :head, :options, :link, :unlink, :trace]
+
     def initialize
       @routes = Hash.new {|h, k| h[k] = []}
     end
 
-    def get(path, &block)
-      add_route!(Rack::GET, Route.new(path, &block)) 
+    HTTP_METHODS.each do |meth|
+      define_method(meth) do |path, &block|
+        add_route!(meth.to_s.upcase, Route.new(path, &block)) 
+      end
     end
 
     def context(path, &block)
@@ -241,7 +235,7 @@ module Kawaii
     end
 
     def add_route!(method, route)
-      puts "add_route! #{method} #{route.inspect}"
+      # puts "add_route! #{method} #{route.inspect}"
       @routes[method] << route
     end
   end
@@ -270,7 +264,6 @@ module Kawaii
     def match(env)
       m = @matcher.match(env[Rack::PATH_INFO])
       puts "RouteContext#match #{env[Rack::PATH_INFO].inspect} #{@matcher.inspect} #{m.inspect}"
-
       super(env.merge(Rack::PATH_INFO => ensure_leading_slash(m.remaining_path))) if m
     end
 

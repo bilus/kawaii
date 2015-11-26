@@ -54,8 +54,8 @@ describe Kawaii do
         expect(last_response).to be_not_found
       end
     end
-
   end
+  
   describe 'nested routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
@@ -238,6 +238,50 @@ describe Kawaii do
       get '/foo'
       expect(last_response).to be_ok
       expect(last_response.body).to eq('/foo')
+    end
+  end
+
+  describe 'other http verbs' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        context '/foo' do
+          post '/' do
+            text('POST /foo/')
+          end
+
+          context '/bar' do
+            put '/' do
+              text('PUT /bar/')
+            end
+            
+            post '/' do
+              text('POST /bar/')
+            end
+          end
+        end
+      end
+    end
+
+    it 'handles one level of nesting' do
+      get '/foo/'
+      expect(last_response).to be_not_found
+      
+      post '/foo/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('POST /foo/')
+    end
+
+    it 'handles two levels of nesting' do
+      get '/foo/bar/'
+      expect(last_response).to be_not_found
+      
+      post '/foo/bar/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('POST /bar/')
+
+      put '/foo/bar/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to include('PUT /bar/')
     end
   end
 end
