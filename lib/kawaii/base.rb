@@ -14,7 +14,7 @@ module Kawaii
   #   require 'my_app.rb'
   #   run MyApp
   class Base
-    def initialize(downstream_app = nil) # TODO: Downstream app.
+    def initialize(downstream_app = nil) # @todo Downstream app.
     end
 
     # Instances of classes derived from [Kawaii::Base] are Rack applications.

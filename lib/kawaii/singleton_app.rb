@@ -56,4 +56,4 @@ end
 
 
 # For self-contained execution without config.ru. See {SingletonApp} above.
-Kawaii::SingletonApp.maybe_start!(8088)  # TODO: Hard-coded port number.
+Kawaii::SingletonApp.maybe_start!(8088)  # @todo Hard-coded port number.

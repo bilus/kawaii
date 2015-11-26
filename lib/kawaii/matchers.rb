@@ -22,7 +22,7 @@ module Kawaii
     # Generated matchers by default match only the beginning of the string containing the actual path from
     # Rack environment.
     def self.compile(path, options = {})
-      # TODO: Make it extendable?
+      # @todo Make it extendable?
       matcher = if path.is_a?(String)
                   StringMatcher.new(path)
                 elsif path.is_a?(Regexp)
@@ -96,7 +96,7 @@ module Kawaii
   class RegexpMatcher
     # Creates a {RegexpMatcher}
     # @param path [Regexp] path specification regex
-    # @todo TODO: Support parameters based on named capture groups.
+    # @todo Support parameters based on named capture groups.
     def initialize(rx)
       @rx = rx
     end

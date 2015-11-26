@@ -4,7 +4,7 @@ module Kawaii
   module ServerMethods
     # Starts serving the app.
     # @param port [Fixnum] port number to bind to
-    def start!(port) # @todo TODO: Support other handlers http://www.rubydoc.info/github/rack/rack/Rack/Handler
+    def start!(port) # @todo Support other handlers http://www.rubydoc.info/github/rack/rack/Rack/Handler
       Rack::Handler.get("WEBrick").run(self, :Port => port) do |s|
         @server = s
         at_exit {  stop! }

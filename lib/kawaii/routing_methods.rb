@@ -55,7 +55,7 @@ module Kawaii
     #   end
     def context(path, &block)
       ctx = RouteContext.new(path)
-      # TODO: Is there a better way to keep ordering of routes?
+      # @todo Is there a better way to keep ordering of routes?
       # An alternative would be to enter each route in a context only once (with 'prefix' based
       # on containing contexts).
       # On the other hand, we're only doing that when compiling routes, further processing is
