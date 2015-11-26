@@ -21,6 +21,8 @@ Or install it yourself as:
 
     $ gem install kawaii
 
+## Running examples
+
 ## Usage
 
 TODO: Write usage instructions here
