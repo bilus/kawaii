@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'kawaii/version'
 
 Gem::Specification.new do |spec|
-  spec.name      = 'kawaii'
+  spec.name      = 'kawaii-core'
   spec.version   = Kawaii::VERSION
   spec.authors   = ['Marcin Bilski']
   spec.email     = ['gyamtso@gmail.com']
