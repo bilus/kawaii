@@ -35,15 +35,16 @@ module Kawaii
         @not_found_handler = block
       end
 
-      # Define an unhandled exception handler. Has to return a valid Rack response.
+      # Define an unhandled exception handler. Has to return a valid Rack
+      # response.
       def on_error(&block)
         @error_handler = block
       end
-      
+
       def match(env)
         super(env) || not_found_handler
       end
-      
+
       # Make it runnable via `run MyApp`.
       def call(env)
         @app ||= new
@@ -51,14 +52,16 @@ module Kawaii
       end
 
       def handle_error(e)
-        handler = @error_handler || ->(ex) { raise ex }
+        handler = @error_handler || ->(ex) { fail ex }
         handler.call(e)
       end
 
       protected
-      
+
       def not_found_handler
-        @downstream_app || @not_found_handler || ->(_env) { text(404, 'Not found') }
+        @downstream_app ||
+          @not_found_handler ||
+          ->(_env) { text(404, 'Not found') }
       end
 
       def text(status, s)

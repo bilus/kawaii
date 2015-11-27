@@ -50,7 +50,7 @@ module Kawaii
     #        corresponds to HelloWorld).
     # @example REST resource routes
     #    route '/users/', 'hello_world'
-    # 
+    #
     #    # Will insert routes corresponding to:
     #    # GET /users/? -> Controller#index
     #    # GET /users/:id/? -> Controller#show

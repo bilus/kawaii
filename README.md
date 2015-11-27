@@ -420,7 +420,7 @@ X Example project using the gem and controllers (with views).
 
 X Custom error handling (intercept exceptions, 404 what else?).
 
-O Rubocop-compliant.
+X Rubocop-compliant.
 
 O Update and push.
 

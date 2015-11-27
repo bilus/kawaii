@@ -17,7 +17,7 @@ module Kawaii
   #  get '/', 'hello_world#index'
   class Controller
     include RenderMethods
-    
+
     # Parameter [Hash] accessible in actions
     attr_reader :params
     # Rack::Request accessible in actions

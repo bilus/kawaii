@@ -9,10 +9,10 @@ Gem::Specification.new do |spec|
   spec.authors   = ['Marcin Bilski']
   spec.email     = ['gyamtso@gmail.com']
 
-  spec.summary       = 'Kawaii is a simple web framework based on Rack'
-  spec.description   = 'Kawaii is a basic but extensible web framework based on Rack'
-  
-  spec.homepage  = "https://github.com/bilus/kawaii"
+  spec.summary       = 'A simple web framework based on Rack'
+  spec.description   = 'Kawaii is a simple web framework based on Rack'
+
+  spec.homepage  = 'https://github.com/bilus/kawaii'
   spec.license   = 'MIT'
 
   spec.files     = `git ls-files -z`.split("\x0").reject { |f|
@@ -31,4 +31,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'guard-rspec', '~>4.6'
   spec.add_development_dependency 'rack-test', '~>0.6'
   spec.add_development_dependency 'yard', '~> 0.8'
+  spec.add_development_dependency 'rubocop', '~> 0.35'
 end

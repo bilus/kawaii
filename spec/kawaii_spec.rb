@@ -300,7 +300,7 @@ describe Kawaii do
     let(:app) do
       Class.new(Kawaii::Base) do
         not_found do
-          [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['NOT FOUND']]
+          [404, { Rack::CONTENT_TYPE => 'text/plain' }, ['NOT FOUND']]
         end
       end
     end
@@ -319,7 +319,7 @@ describe Kawaii do
           fail 'Ooops!'
         end
         on_error do |e|
-          [500, {Rack::CONTENT_TYPE => 'text/plain'}, [e.to_s]]
+          [500, { Rack::CONTENT_TYPE => 'text/plain' }, [e.to_s]]
         end
       end
     end
