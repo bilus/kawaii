@@ -2,13 +2,16 @@
 module Kawaii
   # Result of matching a path.
   class Match
-    # Whatever is left of the path after {Matcher#match} consumed the matching portion.
+    # What is left of the actual path after {Matcher#match} consumed the
+    # matching portion.
     attr_reader :remaining_path
-    # Hash containing params extracted from paths such as /users/:user_id/posts/:post_id
+    # Hash containing params extracted from paths such as
+    # /users/:user_id/posts/:post_id
     attr_reader :params
 
     # Creates a new match result.
-    # @param remaining_path [String] what is left of the actual path after {Matcher#match} consumed the matching portion
+    # @param remaining_path [String] what is left of the actual path after
+    #        {Matcher#match} consumed the matching portion
     # @param params [Hash] params extracted from paths such as /users/:id
     def initialize(remaining_path, params = {})
       @remaining_path = remaining_path
@@ -19,10 +22,12 @@ module Kawaii
   # @abstract Base class for a route matcher.
   class Matcher
     # Creates a matcher.
-    # @param path [String, Regexp, Matcher] path specification to compile to a matcher
-    # @param options [Hash] :full_match to require the entire path to match the resulting matcher
-    # Generated matchers by default match only the beginning of the string containing the actual path from
-    # Rack environment.
+    # @param path [String, Regexp, Matcher] path specification to compile
+    #        to a matcher
+    # @param options [Hash] :full_match to require the entire path to match
+    #        the resulting matcher
+    # Generated matchers by default match only the beginning of the string
+    # containing the actual path from Rack environment.
     def self.compile(path, options = {})
       # @todo Make it extendable?
       matcher = if path.is_a?(String)
@@ -32,20 +37,17 @@ module Kawaii
                 elsif path.is_a?(Matcher)
                   path
                 else
-                  raise RuntimeException, "#{path} is not a supported matcher"
+                  fail RuntimeException, "#{path} is not a supported matcher"
                 end
-      if options[:full_match]
-        FullMatcher.new(matcher) # Require path to fully match.
-      else
-        matcher
-      end
+      options[:full_match] ? FullMatcher.new(matcher) : matcher
     end
 
     # Tries to match the actual path.
     # @param path [String] the actual path from Rack env
-    # @return {Match} if the beginning of path does match or nil if there is no match.
-    def match(path)
-      raise NotImplementedError
+    # @return {Match} if the beginning of path does match or nil if there is
+    # no match.
+    def match(_path)
+      fail NotImplementedError
     end
   end
 
@@ -65,20 +67,20 @@ module Kawaii
     def initialize(path)
       @rx = compile(path)
     end
-    
+
     # Tries to match the actual path.
     # @param path [String] the actual path from Rack env
-    # @return {Match} if the beginning of path does match or nil if there is no match.
+    # @return {Match} if the beginning of path does match or nil if there
+    # is no match.
     def match(path)
       m = path.match(@rx)
-      # puts "StringMatcher#match #{path} #{@rx} #{match_to_params(m) if m} #{m.to_a.inspect if m}"
       Match.new(remaining_path(path, m), match_to_params(m)) if m
     end
 
     protected
 
     def compile(path)
-      prep_path = path.gsub('*', '.*').gsub(/\/\:([^\/]+)/, '/(?<\1>[^\/]+)')
+      prep_path = path.gsub('*', '.*').gsub(%r{/\:([^/]+)}, '/(?<\1>[^\/]+)')
       Regexp.new("^#{prep_path}")
     end
 
@@ -86,15 +88,16 @@ module Kawaii
       _, start = m.offset(0) # Whole match.
       path[start..-1]
     end
-    
+
     def match_to_params(m)
-      m.names.reduce({}) {|params, name| params[name.to_sym] = m[name]; params}
+      # In-place reduce:
+      m.names.each_with_object({}) { |n, params| params[n.to_sym] = m[n] }
     end
   end
 
   # Regular expression matcher.
   # @example Simple regular expression matcher
-  #   get /\/users.*/ do ... end  
+  #   get /\/users.*/ do ... end
   class RegexpMatcher
     # Creates a {RegexpMatcher}
     # @param path [Regexp] path specification regex
@@ -105,9 +108,10 @@ module Kawaii
 
     # Tries to match the actual path.
     # @param path [String] the actual path from Rack env
-    # @return {Match} if the beginning of path does match or nil if there is no match.
+    # @return {Match} if the beginning of path does match or nil if there is
+    # no match.
     def match(path)
-      new_path = path.gsub(@rx, "")
+      new_path = path.gsub(@rx, '')
       Match.new(new_path) if path != new_path
     end
   end
@@ -125,8 +129,7 @@ module Kawaii
     # @return {Match} if the entire path does match or nil otherwise.
     def match(path)
       m = @matcher.match(path)
-      # puts "FullMatcher#match #{path} #{m.remaining_path if m} #{@matcher.inspect}"
-      m if m && m.remaining_path == ""
+      m if m && m.remaining_path == ''
     end
   end
 end

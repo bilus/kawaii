@@ -1,5 +1,6 @@
 module Kawaii
-  # MVP controller. Define actions and map to them using regular routing functions.
+  # MVP controller. Define actions and map to them using regular routing
+  # functions.
   #
   # @example Routing to controllers
   #  class HelloWorld < Kawaii::Controller

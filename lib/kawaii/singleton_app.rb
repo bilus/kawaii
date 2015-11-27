@@ -1,8 +1,9 @@
 module Kawaii
-  # Class used to implement a standalone Kawaii app generated with top-level route helpers
-  # (e.g. monkey-patched onto the `main` object).
+  # Class used to implement a standalone Kawaii app generated with top-level
+  # route helpers (e.g. monkey-patched onto the `main` object).
   #
-  # This lets you create a .rb file containing just route definitions and run it with ruby command.
+  # This lets you create a .rb file containing just route definitions and run it
+  # with `ruby` command.
   #
   # @example test.rb
   #   require 'kawaii'
@@ -18,29 +19,28 @@ module Kawaii
   class SingletonApp < Base
     class << self
       def maybe_start!(port)
-        if !running? && run_directly?
-          # Give routes a chance to install and app to initialize.
-          at_exit { start!(port) unless $ERROR_INFO }
-        end
+        # Give routes a chance to install and app to initialize.
+        at_exit { start!(port) unless $ERROR_INFO } if !running? && run_direct?
       end
 
       protected
 
-      def run_directly?
-        c = caller_locations.map(&:path).find {|path| !skip_caller?(path)}
+      def run_direct?
+        c = caller_locations.map(&:path).find { |path| !skip_caller?(path) }
         File.identical?($PROGRAM_NAME, c)
       end
 
       def skip_caller?(path)
         File.identical?(path, __FILE__) ||
-          path[/rubygems\/core_ext\/kernel_require\.rb$/] ||
-          path[/\/kawaii.rb$/]
+          path[%r{rubygems/core_ext/kernel_require\.rb$}] ||
+          path[%r{/kawaii.rb$}]
       end
     end
   end
 end
 
-# Helpers you use directly in a .rb file without using a class inheriting from {Base}.
+# Helpers you use directly in a .rb file without using a class
+# inheriting from {Base}.
 #
 # @example hello_world.rb
 #   get '/' do
@@ -54,6 +54,5 @@ class << self
   end
 end
 
-
 # For self-contained execution without config.ru. See {SingletonApp} above.
-Kawaii::SingletonApp.maybe_start!(8088)  # @todo Hard-coded port number.
+Kawaii::SingletonApp.maybe_start!(8088) # @todo Hard-coded port number.

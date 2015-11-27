@@ -19,17 +19,17 @@ describe Kawaii do
         get '/ambiguous' do
           text('first route')
         end
-        
+
         get '/ambiguous' do
           text('second route')
         end
       end
     end
-    
+
     it 'renders a welcome page' do
       get '/'
       expect(last_response).to be_ok
-      expect(last_response.body).to include('Hello')    
+      expect(last_response.body).to include('Hello')
     end
 
     it 'supports multiple routes' do
@@ -40,15 +40,15 @@ describe Kawaii do
 
     it 'evaluates in the order routes appear' do
       get '/ambiguous'
-      expect(last_response.body).to include('first route')      
+      expect(last_response.body).to include('first route')
     end
 
-    it "responds with 404 if no matching routes" do
+    it 'responds with 404 if no matching route' do
       get '/foobar'
       expect(last_response).to be_not_found
     end
   end
-  
+
   describe 'nested routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
@@ -71,7 +71,7 @@ describe Kawaii do
       expect(last_response).to be_ok
       expect(last_response.body).to include('Hello')
     end
-    
+
     it 'handles two levels of nesting' do
       get '/foo/bar/'
       expect(last_response).to be_ok
@@ -82,25 +82,25 @@ describe Kawaii do
   describe 'regex routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
-        get /\/|hello/ do
+        get %r{/|hello} do
           text('Hello, world')
         end
 
-        context /\/foo/ do
-          get /\/bar/ do
+        context %r{/foo} do
+          get %r{/bar} do
             text('bar')
           end
         end
       end
     end
-    
+
     it 'renders a welcome page' do
       get '/'
       expect(last_response).to be_ok
-      expect(last_response.body).to include('Hello')    
+      expect(last_response.body).to include('Hello')
       get '/hello'
       expect(last_response).to be_ok
-      expect(last_response.body).to include('Hello')    
+      expect(last_response.body).to include('Hello')
     end
 
     it 'works with contexts' do
@@ -109,7 +109,7 @@ describe Kawaii do
       expect(last_response.body).to include('bar')
     end
 
-    it "responds with 404 if last in chain" do
+    it 'responds with 404 if last in chain' do
       get '/whatever'
       expect(last_response).to be_not_found
     end
@@ -118,29 +118,29 @@ describe Kawaii do
   describe 'wildcard routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
-        get "/hello/?" do
+        get '/hello/?' do
           text('Hello, world')
         end
 
-        context "/foo/?" do
-          get "/bar/?" do
+        context '/foo/?' do
+          get '/bar/?' do
             text('bar')
           end
         end
 
-        get "/*" do
+        get '/*' do
           text('whatever')
         end
       end
     end
-    
+
     it 'renders a welcome page' do
       get '/hello/'
       expect(last_response).to be_ok
-      expect(last_response.body).to include('Hello')    
+      expect(last_response.body).to include('Hello')
       get '/hello'
       expect(last_response).to be_ok
-      expect(last_response.body).to include('Hello')    
+      expect(last_response.body).to include('Hello')
     end
 
     it 'works with contexts' do
@@ -158,29 +158,25 @@ describe Kawaii do
       expect(last_response.body).to include('whatever')
     end
   end
-    
+
   describe 'custom route matchers' do
     class FooMatcher < Kawaii::Matcher
       def match(path)
-        # puts "FooMatcher#match #{path}"
-        if path == '/foo'
-          Kawaii::Match.new('')
-        end
+        Kawaii::Match.new('') if path == '/foo'
       end
     end
-
 
     let(:app) do
       Class.new(Kawaii::Base) do
         get FooMatcher.new do
           text('foo')
         end
-        
+
         get '/bar' do
           text('bar')
         end
       end
-    end      
+    end
     it 'matches paths starting from /foo' do
       get '/foo'
       expect(last_response.body).to include('foo')
@@ -205,7 +201,7 @@ describe Kawaii do
     end
 
     it 'merges params from request' do
-      get '/users/123/posts/567', username: "username"
+      get '/users/123/posts/567', username: 'username'
       expect(last_response).to be_ok
       expect(last_response.body).to include('username')
     end
@@ -239,7 +235,7 @@ describe Kawaii do
             put '/' do
               text('PUT /bar/')
             end
-            
+
             post '/' do
               text('POST /bar/')
             end
@@ -251,7 +247,7 @@ describe Kawaii do
     it 'handles one level of nesting' do
       get '/foo/'
       expect(last_response).to be_not_found
-      
+
       post '/foo/'
       expect(last_response).to be_ok
       expect(last_response.body).to include('POST /foo/')
@@ -260,7 +256,7 @@ describe Kawaii do
     it 'handles two levels of nesting' do
       get '/foo/bar/'
       expect(last_response).to be_not_found
-      
+
       post '/foo/bar/'
       expect(last_response).to be_ok
       expect(last_response.body).to include('POST /bar/')
@@ -274,11 +270,11 @@ describe Kawaii do
   describe 'references to methods' do
     let(:app) do
       Class.new(Kawaii::Base) do
-        def self.bar(params, request) # Current limitation.
+        def self.bar(params, _request) # Current limitation.
           params[:bar]
         end
         context '/ctx' do
-          def foo(params, request)
+          def foo(params, _request)
             params[:foo]
           end
           post '/foo/?', &:foo
@@ -300,5 +296,3 @@ describe Kawaii do
     end
   end
 end
-
-

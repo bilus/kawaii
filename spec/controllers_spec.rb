@@ -6,7 +6,7 @@ class HelloWorld < Kawaii::Controller
   end
 end
 
-describe "Kawaii::Controller" do
+describe Kawaii::Controller do
   describe 'action matching' do
     let(:app) do
       Class.new(Kawaii::Base) do
@@ -17,7 +17,7 @@ describe "Kawaii::Controller" do
     it 'renders response' do
       get '/users/123'
       expect(last_response).to be_ok
-      expect(last_response.body).to eq("123")
+      expect(last_response.body).to eq('123')
     end
   end
 end

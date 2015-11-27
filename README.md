@@ -75,3 +75,12 @@ The gem is available as open source under the terms of the [MIT License](http://
 - Rack/custom global middleware.
 - Route-specific middleware.
 - Custom error handling (intercept exceptions, 404 what else?).
+
+
+## Known issues
+
+### Rubocop
+
+`lib/kawaii/routing_methods.rb:46:1: C: Extra blank line detected.`
+
+The extra line is necessary for Yard to ignore the comment. Adjust Rubocop settings.

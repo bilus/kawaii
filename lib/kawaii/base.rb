@@ -1,6 +1,6 @@
 module Kawaii
-  # Base class for all Kawaii applications. Inherit from this class to create a modular
-  # application.
+  # Base class for all Kawaii applications. Inherit from this class to create
+  # a modular application.
   #
   # @example my_app.rb
   #   require 'kawaii'
@@ -30,16 +30,19 @@ module Kawaii
 
       # Make it runnable via `run MyApp`.
       def call(env)
-        @app ||= self.new
+        @app ||= new
         @app.call(env)
       end
     end
-    
+
     protected
 
     def not_found
-      @downstream_app || lambda { |env| [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['Not found']] }
+      @downstream_app || ->(_env) { text(404, 'Not found') }
     end
-  end  
-end
 
+    def text(status, s)
+      [status, { Rack::CONTENT_TYPE => 'text/plain' }, [s]]
+    end
+  end
+end

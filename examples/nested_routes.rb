@@ -1,6 +1,5 @@
 require 'kawaii'
 
-
 context '/foo' do
   get '/bar' do
     res = Rack::Response.new
@@ -12,6 +11,5 @@ context '/foo' do
     res = Rack::Response.new
     res.write('Hello')
     res.finish
-  end    
+  end
 end
-

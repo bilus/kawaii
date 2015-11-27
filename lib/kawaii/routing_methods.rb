@@ -1,7 +1,8 @@
 module Kawaii
   # Core route-building and matching.
   #
-  # These functions can be used both in a class inheriting from {Base} and in file scope.
+  # These functions can be used both in a class inheriting from {Base}
+  # and in file scope.
   #
   # @example Using a class deriving from {Base}
   #   class MyApp < Kawaii::Base
@@ -15,18 +16,18 @@ module Kawaii
   #     'Hello, world'
   #   end
   module RoutingMethods
-    
     # @!macro [attach] add_http_method
     #   @method $1(path, &block)
     #   Route handler for $1 HTTP method
-    #   @param path [String, Regexp, Matcher] any path specification which can be consumed by {Matcher.compile}
+    #   @param path [String, Regexp, Matcher] any path specification which can
+    #          be consumed by {Matcher.compile}
     #   @param block the route handler
     #   @yield to the given block
     # @note Supported HTTP verbs based on https://github.com/rack/rack/blob/master/lib/rack.rb#L48
     def self.add_http_method(meth)
       define_method(meth) do |path, mapping = nil, &block|
         handler = RouteMapping.new(mapping, &block).resolve
-        add_route!(meth.to_s.upcase, Route.new(self, path, &handler)) 
+        add_route!(meth.to_s.upcase, Route.new(self, path, &handler))
       end
     end
 
@@ -42,12 +43,13 @@ module Kawaii
     add_http_method :trace
     # Note: Have to generate them individually due to yard limitations.
 
-    
+
     # Create a context for route nesting.
     #
-    #   @param path [String, Regexp, Matcher] any path specification which can be consumed by {Matcher.compile}
+    #   @param path [String, Regexp, Matcher] any path specification which can
+    #          be consumed by {Matcher.compile}
     #   @param block the route handler
-    #   @yield to the given block    
+    #   @yield to the given block
     #
     # @example A simple context
     #   context '/foo' do
@@ -57,10 +59,10 @@ module Kawaii
     def context(path, &block)
       ctx = RouteContext.new(self, path)
       # @todo Is there a better way to keep ordering of routes?
-      # An alternative would be to enter each route in a context only once (with 'prefix' based
-      # on containing contexts).
-      # On the other hand, we're only doing that when compiling routes, further processing is
-      # faster this way.
+      # An alternative would be to enter each route in a context only once
+      # (with 'prefix' based on containing contexts).
+      # On the other hand, we're only doing that when compiling routes, further
+      # processing is faster this way.
       ctx.instance_eval(&block)
       ctx.methods_used.each do |meth|
         add_route!(meth, ctx)
@@ -71,11 +73,13 @@ module Kawaii
     # @param env [Hash] Rack environment
     # @return [Route] matching route. Can be nil if no match found.
     def match(env)
-      # puts "Router#match #{env[Rack::PATH_INFO]} #{env[Rack::REQUEST_METHOD]} #{@routes[env[Rack::REQUEST_METHOD]]}"
-      routes[env[Rack::REQUEST_METHOD]].lazy.map {|r| r.match(env)}.find {|r| !r.nil?} # Lazy to avoid unnecessary calls to #match.
+      routes[env[Rack::REQUEST_METHOD]]
+        .lazy # Lazy to avoid unnecessary calls to #match.
+        .map { |r| r.match(env) }
+        .find { |r| !r.nil? }
     end
 
-    # Returns a list of HTTP methods used by the routes (including nested routes).
+    # Returns a list of HTTP methods used by the routes (incl. nested routes).
     # @return [Array<String>] example ["GET", "POST"]
     def methods_used
       routes.keys
@@ -84,12 +88,12 @@ module Kawaii
     protected
 
     def routes
-      @routes ||= Hash.new {|h, k| h[k] = []}
+      @routes ||= Hash.new { |h, k| h[k] = [] }
     end
 
     def add_route!(method, route)
       # puts "add_route! #{method} #{route.inspect}"
       routes[method] << route
     end
-  end  
+  end
 end
