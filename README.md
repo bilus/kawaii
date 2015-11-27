@@ -67,7 +67,8 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Check: References to methods defined in contexts and at class scope.
 + Controllers - 'hello_world#index'
 + 'route' to controllers (via class name or symbol references).
-- Controllers - render.
++ Controllers - render.
+
 - Readme - description and tutorial.
 - Push gem.
 - Example project using the gem and controllers (with views).

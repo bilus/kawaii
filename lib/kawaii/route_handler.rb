@@ -8,6 +8,7 @@ module Kawaii
   #   end
   class RouteHandler
     include MethodChain
+    include RenderMethods
 
     # Params based on request visible in the route handler scope.
     attr_reader :params
@@ -31,12 +32,6 @@ module Kawaii
       @request = Rack::Request.new(env)
       @params = @path_params.merge(@request.params.symbolize_keys)
       process_response(instance_exec(self, params, request, &@block))
-    end
-
-    # @todo Layouts.
-    def render(tmpl)
-      t = Tilt.new(File.join('views', tmpl)) # @todo Caching!
-      t.render(self)
     end
 
     protected
