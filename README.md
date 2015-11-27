@@ -374,7 +374,7 @@ X Readme - description and tutorial.
 
 ## Known issues
 
-** There are many missing features and glitches are inevitable. The library hasn't been used in production yet. Please report them to `gyamtso at gmail dot com`. **
+**There are many missing features and glitches are inevitable. The library hasn't been used in production yet. Please report them to `gyamtso at gmail dot com`.**
 
 ### Rubocop
 
