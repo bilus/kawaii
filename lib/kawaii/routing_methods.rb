@@ -25,7 +25,7 @@ module Kawaii
     # @note Supported HTTP verbs based on https://github.com/rack/rack/blob/master/lib/rack.rb#L48
     def self.add_http_method(meth)
       define_method(meth) do |path, &block|
-        add_route!(meth.to_s.upcase, Route.new(path, &block)) 
+        add_route!(meth.to_s.upcase, Route.new(self, path, &block)) 
       end
     end
 
@@ -54,7 +54,7 @@ module Kawaii
     #     end
     #   end
     def context(path, &block)
-      ctx = RouteContext.new(path)
+      ctx = RouteContext.new(self, path)
       # @todo Is there a better way to keep ordering of routes?
       # An alternative would be to enter each route in a context only once (with 'prefix' based
       # on containing contexts).
@@ -70,7 +70,7 @@ module Kawaii
     # @param env [Hash] Rack environment
     # @return [Route] matching route. Can be nil if no match found.
     def match(env)
-      puts "Router#match #{env[Rack::PATH_INFO]} #{env[Rack::REQUEST_METHOD]} #{@routes[env[Rack::REQUEST_METHOD]]}"
+      # puts "Router#match #{env[Rack::PATH_INFO]} #{env[Rack::REQUEST_METHOD]} #{@routes[env[Rack::REQUEST_METHOD]]}"
       routes[env[Rack::REQUEST_METHOD]].lazy.map {|r| r.match(env)}.find {|r| !r.nil?} # Lazy to avoid unnecessary calls to #match.
     end
 

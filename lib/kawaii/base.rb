@@ -14,7 +14,8 @@ module Kawaii
   #   require 'my_app.rb'
   #   run MyApp
   class Base
-    def initialize(downstream_app = nil) # @todo Downstream app.
+    def initialize(downstream_app = nil)
+      @downstream_app = downstream_app
     end
 
     # Instances of classes derived from [Kawaii::Base] are Rack applications.
@@ -37,7 +38,7 @@ module Kawaii
     protected
 
     def not_found
-      lambda { |env| [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['Not found']] }
+      @downstream_app || lambda { |env| [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['Not found']] }
     end
   end  
 end

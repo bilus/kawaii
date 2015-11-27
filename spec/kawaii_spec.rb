@@ -47,24 +47,21 @@ describe Kawaii do
       expect(last_response.body).to include('first route')      
     end
 
-    describe 'missing route' do
-      it "passes to downstream middleware if present"
-      it "responds with 404 if last in chain" do
-        get '/foobar'
-        expect(last_response).to be_not_found
-      end
+    it "responds with 404 if no matching routes" do
+      get '/foobar'
+      expect(last_response).to be_not_found
     end
   end
   
   describe 'nested routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
-        context '/foo' do
+        context '/foo/' do
           get '/' do
             text('Hello, world')
           end
 
-          context '/bar' do
+          context '/bar/' do
             get '/' do
               text('Foo bar')
             end
@@ -84,13 +81,7 @@ describe Kawaii do
       expect(last_response).to be_ok
       expect(last_response.body).to include('Foo')
     end
-
-    it 'handles different http methods'
-    
-    it 'handles missing slashes'
   end
-
-  it 'handles trailing slashes'
 
   describe 'regex routes' do
     let(:app) do
@@ -175,7 +166,7 @@ describe Kawaii do
   describe 'custom route matchers' do
     class FooMatcher < Kawaii::Matcher
       def match(path)
-        puts "FooMatcher#match #{path}"
+        # puts "FooMatcher#match #{path}"
         if path == '/foo'
           Kawaii::Match.new('')
         end
@@ -206,7 +197,6 @@ describe Kawaii do
     let(:app) do
       Class.new(Kawaii::Base) do
         get '/users/:user_id/posts/:post_id/?' do
-          p request.params
           text("#{params[:user_id]}-#{params[:post_id]}-#{params[:username]}")
         end
       end
@@ -282,6 +272,35 @@ describe Kawaii do
       put '/foo/bar/'
       expect(last_response).to be_ok
       expect(last_response.body).to include('PUT /bar/')
+    end
+  end
+
+  describe 'references to methods' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        def self.bar(params, request) # Current limitation.
+          params[:bar]
+        end
+        context '/ctx' do
+          def foo(params, request)
+            params[:foo]
+          end
+          post '/foo/?', &:foo
+          post '/bar/?', &:bar
+        end
+      end
+    end
+
+    it 'method defined at context scope' do
+      post '/ctx/foo/', foo: 'foo'
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq('foo')
+    end
+
+    it 'method defined at class scope' do
+      post '/ctx/bar/', bar: 'bar'
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq('bar')
     end
   end
 end

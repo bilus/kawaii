@@ -7,6 +7,8 @@ module Kawaii
   #     if params[:id] ...
   #   end
   class RouteHandler
+    include MethodChain
+    
     # Params based on request visible in the route handler scope.
     attr_reader :params
     # Rack::Request object visible in the route handler scope
@@ -15,7 +17,8 @@ module Kawaii
     # Creates a new RouteHandler wrapping a handler block.
     # @param path_params [Hash] named parameters from paths similar to /users/:id
     # @param block [Proc] the actual route handler
-    def initialize(path_params, &block)
+    def initialize(scope, path_params, &block)
+      self.parent_scope = scope
       @path_params = path_params
       @block = block
     end
@@ -26,7 +29,7 @@ module Kawaii
     def call(env)
       @request = Rack::Request.new(env)
       @params = @path_params.merge(@request.params.symbolize_keys)
-      process_response(self.instance_eval(&@block))
+      process_response(self.instance_exec(self, params, request, &@block))
     end
 
     # @todo Layouts.
@@ -43,8 +46,10 @@ module Kawaii
          {Rack::CONTENT_TYPE => 'text/html',
           Rack::CONTENT_LENGTH => response.size.to_s},
          [response]]
-      else
+      elsif response.is_a?(Array)
         response
+      else
+        raise RuntimeError, "Unsupported response from route handler: #{response.inspect}"
       end
     end
   end

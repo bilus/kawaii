@@ -16,10 +16,12 @@ module Kawaii
   # @private
   class RouteContext
     include RoutingMethods
+    include MethodChain
 
     # Create a {RouteContext} object.
     # @param path [String, Regexp, Matcher] any path specification which can be consumed by {Matcher.compile}
-    def initialize(path)
+    def initialize(scope, path)
+      self.parent_scope = scope
       super()
       @matcher = Matcher.compile(path, starts_with: true)
     end
@@ -29,7 +31,7 @@ module Kawaii
     # @return [Route] matching route defined inside the context. Can be nil if no match found.
     def match(env)
       m = @matcher.match(env[Rack::PATH_INFO])
-      puts "RouteContext#match #{env[Rack::PATH_INFO].inspect} #{@matcher.inspect} #{m.inspect}"
+      # puts "RouteContext#match #{env[Rack::PATH_INFO].inspect} #{@matcher.inspect} #{m.inspect}"
       super(env.merge(Rack::PATH_INFO => ensure_leading_slash(m.remaining_path))) if m
     end
 
