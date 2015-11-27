@@ -23,20 +23,25 @@ Or install it yourself as:
 
 ## Running examples
 
-The `/examples` directory contains various basic usage examples.
+Clone the Kawaii project to run the examples. The [/examples directory](https://github.com/bilus/kawaii/tree/master/examples) contains various basic usage examples.
+
+```
+$ git clone https://github.com/bilus/kawaii.git
+$ cd kawaii
+```
 
 Run the examples using rackup or directly:
 
 ```
 $ cd examples
-$ rackup -r kawaii modular.ru
+$ rackup -I ../lib modular.ru
 ```
 
 Many examples can also be run directly without rackup, e.g.:
 
 ```ruby
 $ cd examples
-$ ruby -r kawaii hello_world.rb
+$ ruby -I ../lib hello_world.rb
 ```
 
 ## Getting started
@@ -317,8 +322,8 @@ end
 ## Resources
 
 1. [API reference](http://bilus.github.io/kawaii/Kawaii.html).
-2. See `/examples` for some basic usage of Kawaii.
-
+2. See [examples](https://github.com/bilus/kawaii/tree/master/examples) of basic usage of Kawaii.
+3. Small [example project](https://github.com/bilus/kawaii-sample) using the gem.
 
 ## Contributing
 
@@ -332,33 +337,33 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## TODO
 
-+ Hello world app.
-+ Specs for the app.
-+ GET routes inside a class deriving from Base.
-+ Support for running apps without config.ru (ruby -I ./lib examples/hello_world.rb
-+ Top-level routes.
-+ Example for top-level routes.
-+ Nested routes.
-+ Modular apps (multiple modules via config.ru).
-+ Matchers.
-+ Wildcard regex routes, e.g. '/foo/bar/?'.
-+ Parameter-based routes. Unsupported in 'context'.
-+ Request object.
-+ Merge Rack Request params.
-+ String responses.
-+ Other HTTP verbs.
-+ Refactor & create individual files.
-+ Views (via `render` method in handlers) using Tilt.
-+ Rack route test helpers work.
-+ API reference.
-+ Check: References to methods defined in contexts and at class scope.
-+ Controllers - 'hello_world#index'
-+ 'route' to controllers (via class name or symbol references).
-+ Controllers - render.
-
-- Readme - description and tutorial.
+X Hello world app.
+X Specs for the app.
+X GET routes inside a class deriving from Base.
+X Support for running apps without config.ru (ruby -I ./lib examples/hello_world.rb
+X Top-level routes.
+X Example for top-level routes.
+X Nested routes.
+X Modular apps (multiple modules via config.ru).
+X Matchers.
+X Wildcard regex routes, e.g. '/foo/bar/?'.
+X Parameter-based routes. Unsupported in 'context'.
+X Request object.
+X Merge Rack Request params.
+X String responses.
+X Other HTTP verbs.
+X Refactor & create individual files.
+X Views (via `render` method in handlers) using Tilt.
+X Rack route test helpers work.
+X API reference.
+X Check: References to methods defined in contexts and at class scope.
+X Controllers - 'hello_world#index'
+X 'route' to controllers (via class name or symbol references).
+X Controllers - render.
+X Push gem.
+X Readme - description and tutorial.
 - Rubocop-compliant.
-- Push gem.
+- Update and push.
 
 - Example project using the gem and controllers (with views).
 
