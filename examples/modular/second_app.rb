@@ -1,8 +1,6 @@
 # SecondApp -- see modular.ru
 class SecondApp < Kawaii::Base
   get '/' do
-    res = Rack::Response.new
-    res.write('Second app')
-    res.finish
+    'Second app'
   end
 end
