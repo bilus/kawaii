@@ -3,7 +3,7 @@
 
 Kawaii is a simple web framework based on Rack.
 
-** This is work in progress. The API is subject to change. **
+**This is work in progress. The API is subject to change.**
 
 ## Installation
 
@@ -34,9 +34,10 @@ $ rackup -r kawaii modular.ru
 
 Many examples can also be run directly without rackup, e.g.:
 
-```
+```ruby
 $ cd examples
 $ ruby -r kawaii hello_world.rb
+```
 
 ## Getting started
 
@@ -44,7 +45,7 @@ Note: In addition to this Readme, there's also an online [API reference](http://
 
 Kawaii's basic usage is very similar how you'd use Sinatra. You can define route handlers at the file scope. Here's an example:
 
-```
+```ruby
 require 'kawaii'
 
 get '/' do
@@ -64,7 +65,7 @@ Then navigate to `http://localhost:8088` to see the greeting.
 
 To run the app you created in the "Getting started" section above using rackup, create the following `hello.ru` file:
 
-```
+```ruby
 require 'kawaii'
 require_relative 'hello'
 
@@ -81,7 +82,7 @@ There are several methods you can use to build your routes, handle passed parame
 
 The basic way to add a route handler is to invoke a method corresponding to the given HTTP verb, e.g.:
 
-```
+```ruby
 post '/users' do
   # Some response
 end
@@ -112,7 +113,7 @@ For example `get '/users/?'` matches both `/users/` and `/users` while `get '/us
 
 Route patterns may contain named parameters, prefixed with a colon. Parameters are accessible through the `params` hash in handler:
 
-```
+```ruby
 get '/users/:id' do
   params[:id]
 end
@@ -124,7 +125,7 @@ end
 
 Route patterns may contain regular expressions. Example:
 
-```
+```ruby
 get %r{/users/.*} do
   'Hello, world'
 end
@@ -134,7 +135,7 @@ end
 
 Routes may be nested using the `context` method. Example:
 
-```
+```ruby
 context '/api' do
   get '/users' do
     'Hello'
@@ -154,7 +155,7 @@ A matcher instance responds to `match` method and returns either a `Match` insta
 
 Handlers can access the `Rack::Request` instance corresponding to the current request:
 
-```
+```ruby
 get '/' do
   request.host
 end
@@ -164,7 +165,7 @@ end
 
 View templates must currently be stored in `views/` directory of the project using Kawaii. They can be rendered using the `render` method:
 
-```
+```ruby
 get '/' do
   render('index.html.erb')
 end
@@ -172,7 +173,7 @@ end
 
 You can set instance variables and use them in the templates.
 
-```
+```ruby
 get '/' do
   @title = 'Hello, world'
   render('index.html.erb')
@@ -181,7 +182,7 @@ end
 
 Let's say `views/index.html.erb` looks like this:
 
-```
+```html
 <h1><%= @title %></h1>
 ```
 
