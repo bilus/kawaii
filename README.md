@@ -70,14 +70,15 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Controllers - render.
 
 - Readme - description and tutorial.
-- Push gem.
-- Example project using the gem and controllers (with views).
 - Rubocop-compliant.
+- Push gem.
+
+- Example project using the gem and controllers (with views).
 
 - Rack/custom global middleware.
 - Route-specific middleware.
 - Custom error handling (intercept exceptions, 404 what else?).
-
+- Code review
 
 ## Known issues
 

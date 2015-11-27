@@ -23,7 +23,6 @@ class HelloWorld < Kawaii::Controller
   end
 end
 
-
 class App < Kawaii::Base
   route '/users/', :hello_world
 end
