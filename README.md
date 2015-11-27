@@ -365,6 +365,8 @@ The gem is available as open source under the terms of the [MIT License](http://
 
 ## Known issues
 
+** There are many missing features and glitches are inevitable. The library hasn't been used in production yet. Please report them to `gyamtso at gmail dot com`. **
+
 ### Rubocop
 
 `lib/kawaii/routing_methods.rb:46:1: C: Extra blank line detected.`

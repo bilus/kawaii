@@ -9,8 +9,10 @@ Gem::Specification.new do |spec|
   spec.authors   = ['Marcin Bilski']
   spec.email     = ['gyamtso@gmail.com']
 
-  spec.summary   = 'TODO: Write a short summary, because Rubygems requires one.'
-  spec.homepage  = "TODO: Put your gem's website or public repo URL here."
+  spec.summary       = 'Kawaii is a simple web framework based on Rack'
+  spec.description   = 'Kawaii is a basic but extensible web framework based on Rack'
+  
+  spec.homepage  = "https://github.com/bilus/kawaii"
   spec.license   = 'MIT'
 
   spec.files     = `git ls-files -z`.split("\x0").reject { |f|
@@ -25,8 +27,8 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency 'bundler', '~> 1.10'
   spec.add_development_dependency 'rake', '~> 10.0'
-  spec.add_development_dependency 'rspec'
-  spec.add_development_dependency 'guard-rspec'
-  spec.add_development_dependency 'rack-test'
-  spec.add_development_dependency 'yard'
+  spec.add_development_dependency 'rspec', '~> 3.4'
+  spec.add_development_dependency 'guard-rspec', '~>4.6'
+  spec.add_development_dependency 'rack-test', '~>0.6'
+  spec.add_development_dependency 'yard', '~> 0.8'
 end
