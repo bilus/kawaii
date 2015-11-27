@@ -65,8 +65,8 @@ The gem is available as open source under the terms of the [MIT License](http://
 + Rack route test helpers work.
 + API reference.
 + Check: References to methods defined in contexts and at class scope.
-
-- Action controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
++ Controllers - 'hello_world#index'
+- 'route' to controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
 - Readme - description and tutorial.
 - Push gem.
 - Example project using the gem.
