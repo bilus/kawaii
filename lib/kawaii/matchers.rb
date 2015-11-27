@@ -43,7 +43,7 @@ module Kawaii
     end
 
     # Tries to match the actual path.
-    # @param path [String] the actual path from Rack env
+    # @param _path [String] the actual path from Rack env
     # @return {Match} if the beginning of path does match or nil if there is
     # no match.
     def match(_path)
@@ -100,7 +100,7 @@ module Kawaii
   #   get /\/users.*/ do ... end
   class RegexpMatcher
     # Creates a {RegexpMatcher}
-    # @param path [Regexp] path specification regex
+    # @param rx [Regexp] path specification regex
     # @todo Support parameters based on named capture groups.
     def initialize(rx)
       @rx = rx

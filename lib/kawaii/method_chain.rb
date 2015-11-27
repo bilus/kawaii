@@ -1,6 +1,6 @@
 module Kawaii
   # Allows handlers to use methods defined in outer contexts or at class scope.
-  # Set {#parent_scope} in constructor.
+  # Set MethodChain.parent_scope in constructor.
   module MethodChain
     attr_writer :parent_scope
 

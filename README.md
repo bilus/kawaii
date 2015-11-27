@@ -40,6 +40,8 @@ $ ruby -r kawaii hello_world.rb
 
 ## Getting started
 
+Note: In addition to this Readme, there's also an online [API reference](http://bilus.github.io/kawaii/Kawaii.html).
+
 Kawaii's basic usage is very similar how you'd use Sinatra. You can define route handlers at the file scope. Here's an example:
 
 ```
@@ -146,7 +148,7 @@ Will above handler will be accessible through `/api/users`.
 
 If string patterns and regular expression are not flexible enough, you can create a custom matcher.
 
-A matcher instance responds to `match` method and returns either a `Match` instance or nil if there's no match. See documentation for {Matcher#match} for more details.
+A matcher instance responds to `match` method and returns either a `Match` instance or nil if there's no match. See documentation for {Kawaii::Matcher#match} for more details.
 
 ### Request object
 
@@ -313,8 +315,9 @@ end
 
 ## Resources
 
-See `/examples` 
-### Reference
+1. [API reference](http://bilus.github.io/kawaii/Kawaii.html).
+2. See `/examples` for some basic usage of Kawaii.
+
 
 ## Contributing
 
