@@ -1,0 +1,486 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>
+  File: README
+  
+    &mdash; Documentation by YARD 0.8.7.6
+  
+</title>
+
+  <link rel="stylesheet" href="css/style.css" type="text/css" charset="utf-8" />
+
+  <link rel="stylesheet" href="css/common.css" type="text/css" charset="utf-8" />
+
+<script type="text/javascript" charset="utf-8">
+  hasFrames = window.top.frames.main ? true : false;
+  relpath = '';
+  framesUrl = "frames.html#!file.README.html";
+</script>
+
+
+  <script type="text/javascript" charset="utf-8" src="js/jquery.js"></script>
+
+  <script type="text/javascript" charset="utf-8" src="js/app.js"></script>
+
+
+  </head>
+  <body>
+    <div id="header">
+      <div id="menu">
+  
+    <a href="_index.html">Index</a> &raquo; 
+    <span class="title">File: README</span>
+  
+
+  <div class="noframes"><span class="title">(</span><a href="." target="_top">no frames</a><span class="title">)</span></div>
+</div>
+
+      <div id="search">
+  
+    <a class="full_list_link" id="class_list_link"
+        href="class_list.html">
+      Class List
+    </a>
+  
+    <a class="full_list_link" id="method_list_link"
+        href="method_list.html">
+      Method List
+    </a>
+  
+    <a class="full_list_link" id="file_list_link"
+        href="file_list.html">
+      File List
+    </a>
+  
+</div>
+      <div class="clear"></div>
+    </div>
+
+    <iframe id="search_frame"></iframe>
+
+    <div id="content"><div id='filecontents'>
+<h1 id="label-Kawaii">Kawaii</h1>
+
+<p>Kawaii is a simple web framework based on Rack.</p>
+
+<p><em>* This is work in progress. The API is subject to change. *</em></p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<p>Add this line to your application&#39;s Gemfile:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_gem'>gem</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>kawaii-core</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>And then execute:</p>
+
+<pre class="code ruby"><code class="ruby">$ bundle</code></pre>
+
+<p>Or install it yourself as:</p>
+
+<pre class="code ruby"><code class="ruby">$ gem install kawaii-core</code></pre>
+
+<h2 id="label-Running+examples">Running examples</h2>
+
+<p>The <code>/examples</code> directory contains various basic usage examples.</p>
+
+<p>Run the examples using rackup or directly:</p>
+
+<pre class="code ruby"><code class="ruby">$ cd examples
+$ rackup -r kawaii modular.ru</code></pre>
+
+<p>Many examples can also be run directly without rackup, e.g.:</p>
+
+<pre class="code ruby"><code class="ruby">$ cd examples
+$ ruby -r kawaii hello_world.rb
+
+## Getting started
+
+Kawaii&#39;s basic usage is very similar how you&#39;d use Sinatra. You can define route handlers at the file scope. Here&#39;s an example:</code></pre>
+
+<p>require &#39;kawaii&#39;</p>
+
+<p>get &#39;/&#39; do  &#39;Hello, world!&#39; end “`</p>
+
+<p>Save it to <code>hello.rb</code> and start the server like this:</p>
+
+<pre class="code ruby"><code class="ruby">$ rackup -r kawaii hello.rb --port 8088</code></pre>
+
+<p>Then navigate to <code>http://localhost:8088</code> to see the greeting.</p>
+
+<h2 id="label-Using+rackup">Using rackup</h2>
+
+<p>To run the app you created in the “Getting started” section above using
+rackup, create the following <code>hello.ru</code> file:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>kawaii</span><span class='tstring_end'>&#39;</span></span>
+<span class='id identifier rubyid_require_relative'>require_relative</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hello</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='id identifier rubyid_run'>run</span> <span class='const'>Kawaii</span><span class='op'>::</span><span class='const'>SingletonApp</span>
+</code></pre>
+
+<p><code>SingletonApp</code> contains all routes defined at the file scope.</p>
+
+<h2 id="label-Defining+routes">Defining routes</h2>
+
+<p>There are several methods you can use to build your routes, handle passed
+parameters and so on.</p>
+
+<h3 id="label-Supported+HTTP+methods">Supported HTTP methods</h3>
+
+<p>The basic way to add a route handler is to invoke a method corresponding to
+the given HTTP verb, e.g.:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_post'>post</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/users</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='comment'># Some response
+</span><span class='kw'>end</span></code></pre>
+
+<p>Here, the <code>post</code> method corresponds to the <code>POST</code>
+HTTP verb.</p>
+
+<p>Here&#39;s a list of supported HTTP verbs:</p>
+<ul><li>
+<p>get</p>
+</li><li>
+<p>post</p>
+</li><li>
+<p>put</p>
+</li><li>
+<p>patch</p>
+</li><li>
+<p>delete</p>
+</li><li>
+<p>head</p>
+</li><li>
+<p>options</p>
+</li><li>
+<p>link</p>
+</li><li>
+<p>unlink</p>
+</li><li>
+<p>trace</p>
+</li></ul>
+
+<h3 id="label-Wildcard+matching">Wildcard matching</h3>
+
+<p>Patterns in route definitions may contain wildcard characters
+<code>*</code> and <code>?</code>.</p>
+
+<p>For example <code>get &#39;/users/?&#39;</code> matches both
+<code>/users/</code> and <code>/users</code> while <code>get
+&#39;/users/*&#39;</code> will match any path starting with
+&#39;/users/&#39; e.g. &#39;/users/foo/bar&#39;.</p>
+
+<h3 id="label-Parameters">Parameters</h3>
+
+<p>Route patterns may contain named parameters, prefixed with a colon.
+Parameters are accessible through the <code>params</code> hash in handler:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/users/:id</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span>
+<span class='kw'>end</span></code></pre>
+
+<p>(When requested with <code>/users/123</code>, the above route handler will
+render <code>&quot;123&quot;</code>.)</p>
+
+<h3 id="label-Regular+expressions">Regular expressions</h3>
+
+<p>Route patterns may contain regular expressions. Example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='regexp_beg'>%r{</span><span class='tstring_content'>/users/.*</span><span class='regexp_end'>}</span></span> <span class='kw'>do</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Hello, world</span><span class='tstring_end'>&#39;</span></span>
+<span class='kw'>end</span></code></pre>
+
+<h3 id="label-Nested+routes">Nested routes</h3>
+
+<p>Routes may be nested using the <code>context</code> method. Example:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_context'>context</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/api</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/users</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Hello</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span></code></pre>
+
+<p>Will above handler will be accessible through <code>/api/users</code>.</p>
+
+<h3 id="label-Custom+matchers">Custom matchers</h3>
+
+<p>If string patterns and regular expression are not flexible enough, you can
+create a custom matcher.</p>
+
+<p>A matcher instance responds to <code>match</code> method and returns either
+a <code>Match</code> instance or nil if there&#39;s no match. See
+documentation for <span class='object_link'><a href="Kawaii/Matcher.html#match-instance_method" title="Kawaii::Matcher#match (method)">Kawaii::Matcher#match</a></span> for more details.</p>
+
+<h3 id="label-Request+object">Request object</h3>
+
+<p>Handlers can access the <code>Rack::Request</code> instance corresponding
+to the current request:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_host'>host</span>
+<span class='kw'>end</span></code></pre>
+
+<h3 id="label-View+templates">View templates</h3>
+
+<p>View templates must currently be stored in <code>views/</code> directory of
+the project using Kawaii. They can be rendered using the
+<code>render</code> method:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_render'>render</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>index.html.erb</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></code></pre>
+
+<p>You can set instance variables and use them in the templates.</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='ivar'>@title</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Hello, world</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_render'>render</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>index.html.erb</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
+<span class='kw'>end</span></code></pre>
+
+<p>Let&#39;s say <code>views/index.html.erb</code> looks like this:</p>
+
+<pre class="code ruby"><code class="ruby">&lt;h1&gt;&lt;%= @title %&gt;&lt;/h1&gt;</code></pre>
+
+<p>In that case, when you visit the page, you&#39;ll see <strong>Hello,
+world</strong>.</p>
+
+<p>Supported templating engines include: ERB, Haml, Liquid, Builder, Kramdown
+and others. Note that you may need to include the specific gem implementing
+the given templating engine as inferred from the file name of the template.</p>
+
+<h2 id="label-Modular+apps">Modular apps</h2>
+
+<p>For building more complex applications, you can split them into separate
+classes, each implementing a subset of functionality (e.g. website and an
+API).</p>
+
+<p>To create an application, inherit from <code>Kawaii::Base</code> and define
+your routes inside the class.</p>
+
+<p>Let&#39;s create <code>website.rb</code>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>kawaii</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='kw'>class</span> <span class='const'>Website</span> <span class='op'>&lt;</span> <span class='const'>Kawaii</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Hello, world</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>Now here&#39;s how <code>api.rb</code> may look like:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>kawaii</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='kw'>class</span> <span class='const'>API</span> <span class='op'>&lt;</span> <span class='const'>Kawaii</span><span class='op'>::</span><span class='const'>Base</span>
+  <span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/info</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>This is some information</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>Let&#39;s use the apps in a <code>config.ru</code>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>kawaii</span><span class='tstring_end'>&#39;</span></span>
+<span class='id identifier rubyid_require_relative'>require_relative</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>website</span><span class='tstring_end'>&#39;</span></span>
+<span class='id identifier rubyid_require_relative'>require_relative</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>api</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='id identifier rubyid_map'>map</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_run'>run</span> <span class='const'>Website</span>
+<span class='kw'>end</span>
+
+<span class='id identifier rubyid_map'>map</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/api</span><span class='tstring_end'>&#39;</span></span> <span class='kw'>do</span>
+  <span class='id identifier rubyid_run'>run</span> <span class='const'>API</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<h2 id="label-Model-view-controller+apps">Model-view-controller apps</h2>
+
+<p>Kawaii supports routing to controllers by either specifying the specific
+controller + action for a given route or by creating automatic Restful
+resources (via <code>route</code>).</p>
+
+<p>Let&#39;s suppose we have a controller in <code>hello_world.rb</code> has
+typical CRUD methods that mimick Rails controllers:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>HelloWorld</span> <span class='op'>&lt;</span> <span class='const'>Kawaii</span><span class='op'>::</span><span class='const'>Controller</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Hello, world</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>An in <code>users.rb</code>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='kw'>class</span> <span class='const'>Users</span> <span class='op'>&lt;</span> <span class='const'>Kawaii</span><span class='op'>::</span><span class='const'>Controller</span>
+  <span class='kw'>def</span> <span class='id identifier rubyid_index'>index</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>GET /users</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_show'>show</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>GET /users/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_create'>create</span>
+    <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>POST /users</span><span class='tstring_end'>&#39;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_update'>update</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>PATCH /users/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+
+  <span class='kw'>def</span> <span class='id identifier rubyid_destroy'>destroy</span>
+    <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>DELETE /users/</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='lbracket'>[</span><span class='symbol'>:id</span><span class='rbracket'>]</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>end</span>
+<span class='kw'>end</span>
+</code></pre>
+
+<p>Here&#39;s how we can define routes (in <code>app.rb</code>):</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require'>require</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>kawaii</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_require_relative'>require_relative</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hello_world</span><span class='tstring_end'>&#39;</span></span>
+  <span class='id identifier rubyid_require_relative'>require_relative</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>users</span><span class='tstring_end'>&#39;</span></span>
+
+  <span class='id identifier rubyid_get'>get</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>hello_world#index</span><span class='tstring_end'>&#39;</span></span> <span class='comment'># Explicitly route to `HelloWorld#index` to show the welcome page
+</span>
+  <span class='id identifier rubyid_route'>route</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>/users</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>users</span><span class='tstring_end'>&#39;</span></span>
+</code></pre>
+
+<p>You can run the app directly using <code>ruby</code> or create
+<code>config.ru</code>:</p>
+
+<pre class="code ruby"><code class="ruby"><span class='id identifier rubyid_require_relative'>require_relative</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>app.rb</span><span class='tstring_end'>&#39;</span></span>
+
+<span class='id identifier rubyid_run'>run</span> <span class='const'>Kawaii</span><span class='op'>::</span><span class='const'>SingletonApp</span>
+</code></pre>
+
+<p>Of course, you can</p>
+
+<h2 id="label-Testing">Testing</h2>
+
+<p>I recommend using <code>Rack::Test</code> for testing (see <a
+href="https://github.com/brynary/rack-test">here</a>). Look at specs in
+<code>spec/</code> to see how you can use it.</p>
+
+<p>To make a long story short, a class deriving from <code>Kawaii::Base</code>
+containing your routes is <code>app</code>. Let&#39;s suppose, your app
+class is <code>MyApp</code>, here&#39;s how you could test it:</p>
+
+<pre class="code ruby"><code class="ruby">describe MyApp
+  let(:app) { MyApp }
+  it &#39;renders home page&#39; do
+    get &#39;/&#39;
+    expect(last_response).to be_ok
+  end
+end
+</code></pre>
+
+<h2 id="label-Resources">Resources</h2>
+
+<p>See <code>/examples</code></p>
+
+<h3 id="label-Reference">Reference</h3>
+
+<h2 id="label-Contributing">Contributing</h2>
+
+<p>Bug reports and pull requests are welcome on GitHub at <a
+href="https://github.com/bilus/kawaii">github.com/bilus/kawaii</a>.</p>
+
+<h2 id="label-License">License</h2>
+
+<p>The gem is available as open source under the terms of the <a
+href="http://opensource.org/licenses/MIT">MIT License</a>.</p>
+
+<h2 id="label-TODO">TODO</h2>
+<ul><li>
+<p>Hello world app.</p>
+</li><li>
+<p>Specs for the app.</p>
+</li><li>
+<p>GET routes inside a class deriving from Base.</p>
+</li><li>
+<p>Support for running apps without config.ru (ruby -I ./lib
+examples/hello_world.rb</p>
+</li><li>
+<p>Top-level routes.</p>
+</li><li>
+<p>Example for top-level routes.</p>
+</li><li>
+<p>Nested routes.</p>
+</li><li>
+<p>Modular apps (multiple modules via config.ru).</p>
+</li><li>
+<p>Matchers.</p>
+</li><li>
+<p>Wildcard regex routes, e.g. &#39;/foo/bar/?&#39;.</p>
+</li><li>
+<p>Parameter-based routes. Unsupported in &#39;context&#39;.</p>
+</li><li>
+<p>Request object.</p>
+</li><li>
+<p>Merge Rack Request params.</p>
+</li><li>
+<p>String responses.</p>
+</li><li>
+<p>Other HTTP verbs.</p>
+</li><li>
+<p>Refactor &amp; create individual files.</p>
+</li><li>
+<p>Views (via <code>render</code> method in handlers) using Tilt.</p>
+</li><li>
+<p>Rack route test helpers work.</p>
+</li><li>
+<p>API reference.</p>
+</li><li>
+<p>Check: References to methods defined in contexts and at class scope.</p>
+</li><li>
+<p>Controllers - &#39;hello_world#index&#39;</p>
+</li><li>
+<p>&#39;route&#39; to controllers (via class name or symbol references).</p>
+</li><li>
+<p>Controllers - render.</p>
+</li><li>
+<p>Readme - description and tutorial.</p>
+</li><li>
+<p>Rubocop-compliant.</p>
+</li><li>
+<p>Push gem.</p>
+</li><li>
+<p>Example project using the gem and controllers (with views).</p>
+</li><li>
+<p>Rack/custom global middleware.</p>
+</li><li>
+<p>Route-specific middleware.</p>
+</li><li>
+<p>Custom error handling (intercept exceptions, 404 what else?).</p>
+</li><li>
+<p>Code review</p>
+</li></ul>
+
+<h2 id="label-Known+issues">Known issues</h2>
+
+<p><em>* There are many missing features and glitches are inevitable. The
+library hasn&#39;t been used in production yet. Please report them to
+<code>gyamtso at gmail dot com</code>. *</em></p>
+
+<h3 id="label-Rubocop">Rubocop</h3>
+
+<p><code>lib/kawaii/routing_methods.rb:46:1: C: Extra blank line
+detected.</code></p>
+
+<p>The extra line is necessary for Yard to ignore the comment. Adjust Rubocop
+settings.</p>
+</div></div>
+
+    <div id="footer">
+  Generated on Fri Nov 27 16:43:42 2015 by
+  <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
+  0.8.7.6 (ruby-2.1.2).
+</div>
+
+  </body>
+</html>
