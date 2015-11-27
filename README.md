@@ -71,6 +71,7 @@ The gem is available as open source under the terms of the [MIT License](http://
 - Push gem.
 - Example project using the gem.
 - Rubocop-compliant.
+
 - Rack/custom global middleware.
 - Route-specific middleware.
 - Custom error handling (intercept exceptions, 404 what else?).

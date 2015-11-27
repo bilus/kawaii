@@ -24,8 +24,9 @@ module Kawaii
     #   @yield to the given block
     # @note Supported HTTP verbs based on https://github.com/rack/rack/blob/master/lib/rack.rb#L48
     def self.add_http_method(meth)
-      define_method(meth) do |path, &block|
-        add_route!(meth.to_s.upcase, Route.new(self, path, &block)) 
+      define_method(meth) do |path, mapping = nil, &block|
+        handler = RouteMapping.new(mapping, &block).resolve
+        add_route!(meth.to_s.upcase, Route.new(self, path, &handler)) 
       end
     end
 
