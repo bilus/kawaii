@@ -330,4 +330,32 @@ describe Kawaii do
       expect(last_response.body).to eq('Ooops!')
     end
   end
+
+  describe 'Rack middleware' do
+    class AppendWorld
+      def initialize(app)
+        @app = app
+      end
+
+      def call(env)
+        status, headers, response = @app.call(env)
+        response[0] += 'world!'
+        [status, headers, response]
+      end
+    end
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get '/' do
+          'Hello, '
+        end
+        use AppendWorld
+      end
+    end
+
+    it 'uses the custom handler' do
+      get '/'
+      expect(last_response).to be_ok
+      expect(last_response.body).to eq('Hello, world!')
+    end
+  end
 end

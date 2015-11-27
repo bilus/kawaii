@@ -20,8 +20,8 @@ module Kawaii
 
     # Instances of classes derived from [Kawaii::Base] are Rack applications.
     def call(env)
-      matching = self.class.match(env)
-      matching.call(env)
+      h = self.class.build(env)
+      h.call(env)
     rescue => e
       self.class.handle_error(e)
     end
@@ -41,8 +41,10 @@ module Kawaii
         @error_handler = block
       end
 
-      def match(env)
-        super(env) || not_found_handler
+      def build(env)
+        h = match(env) || not_found_handler
+        builder.run h
+        builder.to_app
       end
 
       # Make it runnable via `run MyApp`.
@@ -54,6 +56,14 @@ module Kawaii
       def handle_error(e)
         handler = @error_handler || ->(ex) { fail ex }
         handler.call(e)
+      end
+
+      def use(middleware, *args, &block)
+        builder.use(middleware, *args, &block)
+      end
+
+      def builder
+        @builder ||= Rack::Builder.new
       end
 
       protected

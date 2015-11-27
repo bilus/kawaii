@@ -348,6 +348,37 @@ end
 
 Just like with `not_found`, you need to return a well-formed Rack response Array.
 
+## Middleware
+
+To use Rack middleware, you have two options. You can either use a rackup file or use the `use` method in a
+class deriving from `Kawaii::Base`. For the former, there's plenty of information on the Internet
+including this [more advanced tutorial](https://blog.engineyard.com/2015/understanding-rack-apps-and-middleware).
+
+To use middleware in `Kawaii::Base`-derived class, use the `use` method (no pun intended). Example:
+
+```ruby
+class AppendWorld
+  def initialize(app)
+  @app = app
+  end
+  def call(env)
+    status, headers, response = @app.call(env)
+    response[0] += 'world!' # Quick & dirty.
+    [status, headers, response]
+  end
+end
+
+class MyApp < Kawaii::Base
+  get '/' do
+    'Hello, '
+  end
+
+  use AppendWorld
+end
+```
+
+Visiting the `/` path will render 'Hello, world!'.
+
 ## Resources
 
 1. [API reference](http://bilus.github.io/kawaii/Kawaii.html).
@@ -422,13 +453,13 @@ X Custom error handling (intercept exceptions, 404 what else?).
 
 X Rubocop-compliant.
 
-O Update and push.
+X Update and push.
 
-O Code review
+X Code review
 
-O Rack/custom global middleware.
+X Rack/custom global middleware.
 
-O Route-specific middleware.
+X Route-specific middleware.
 
 ## Known issues
 
