@@ -5,10 +5,6 @@ def text(s)
 end
 
 describe Kawaii do
-  it 'has a version number' do
-    expect(Kawaii::VERSION).not_to be nil
-  end
-  
   describe 'simple routes' do
     let(:app) do
       Class.new(Kawaii::Base) do
