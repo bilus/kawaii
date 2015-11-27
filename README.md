@@ -338,39 +338,68 @@ The gem is available as open source under the terms of the [MIT License](http://
 ## TODO
 
 X Hello world app.
+
 X Specs for the app.
+
 X GET routes inside a class deriving from Base.
+
 X Support for running apps without config.ru (ruby -I ./lib examples/hello_world.rb
+
 X Top-level routes.
+
 X Example for top-level routes.
+
 X Nested routes.
+
 X Modular apps (multiple modules via config.ru).
+
 X Matchers.
+
 X Wildcard regex routes, e.g. '/foo/bar/?'.
+
 X Parameter-based routes. Unsupported in 'context'.
+
 X Request object.
+
 X Merge Rack Request params.
+
 X String responses.
+
 X Other HTTP verbs.
+
 X Refactor & create individual files.
+
 X Views (via `render` method in handlers) using Tilt.
+
 X Rack route test helpers work.
+
 X API reference.
+
 X Check: References to methods defined in contexts and at class scope.
+
 X Controllers - 'hello_world#index'
+
 X 'route' to controllers (via class name or symbol references).
+
 X Controllers - render.
+
 X Push gem.
+
 X Readme - description and tutorial.
-- Rubocop-compliant.
-- Update and push.
 
-- Example project using the gem and controllers (with views).
+O Rubocop-compliant.
 
-- Rack/custom global middleware.
-- Route-specific middleware.
-- Custom error handling (intercept exceptions, 404 what else?).
-- Code review
+O Update and push.
+
+O Example project using the gem and controllers (with views).
+
+O Rack/custom global middleware.
+
+O Route-specific middleware.
+
+O Custom error handling (intercept exceptions, 404 what else?).
+
+O Code review
 
 ## Known issues
 
