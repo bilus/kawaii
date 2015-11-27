@@ -319,6 +319,35 @@ describe MyApp
 end
 ```
 
+## Custom 404 handler
+
+By default Kawaii will respond with 404 'Not found' if no matching routes can be found.
+
+You can define your own 404 handler:
+
+```ruby
+not_found do
+  [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['No matching routes found']]
+end
+```
+
+Notice that it needs to respond with a valid Rack response Array.
+
+## Custom exception handler
+
+You can define your own 500 handler for unhandled exception:
+
+```ruby
+get '/' do
+  fail 'Ooops!'
+end
+on_error do |e|
+  [500, {Rack::CONTENT_TYPE => 'text/plain'}, [e.to_s]]
+end
+```
+
+Just like with `not_found`, you need to return a well-formed Rack response Array.
+
 ## Resources
 
 1. [API reference](http://bilus.github.io/kawaii/Kawaii.html).
@@ -387,19 +416,19 @@ X Push gem.
 
 X Readme - description and tutorial.
 
+X Example project using the gem and controllers (with views).
+
+X Custom error handling (intercept exceptions, 404 what else?).
+
 O Rubocop-compliant.
 
 O Update and push.
 
-O Example project using the gem and controllers (with views).
+O Code review
 
 O Rack/custom global middleware.
 
 O Route-specific middleware.
-
-O Custom error handling (intercept exceptions, 404 what else?).
-
-O Code review
 
 ## Known issues
 

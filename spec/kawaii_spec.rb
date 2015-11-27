@@ -295,4 +295,39 @@ describe Kawaii do
       expect(last_response.body).to eq('bar')
     end
   end
+
+  describe 'custom 404 handler' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        not_found do
+          [404, {Rack::CONTENT_TYPE => 'text/plain'}, ['NOT FOUND']]
+        end
+      end
+    end
+
+    it 'uses the custom handler' do
+      get '/'
+      expect(last_response).to be_not_found
+      expect(last_response.body).to eq('NOT FOUND')
+    end
+  end
+
+  describe 'custom error handler' do
+    let(:app) do
+      Class.new(Kawaii::Base) do
+        get '/' do
+          fail 'Ooops!'
+        end
+        on_error do |e|
+          [500, {Rack::CONTENT_TYPE => 'text/plain'}, [e.to_s]]
+        end
+      end
+    end
+
+    it 'uses the custom handler' do
+      get '/'
+      expect(last_response.status).to eq(500)
+      expect(last_response.body).to eq('Ooops!')
+    end
+  end
 end

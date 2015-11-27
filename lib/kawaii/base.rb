@@ -20,29 +20,50 @@ module Kawaii
 
     # Instances of classes derived from [Kawaii::Base] are Rack applications.
     def call(env)
-      matching = self.class.match(env) || not_found
+      matching = self.class.match(env)
       matching.call(env)
+    rescue => e
+      self.class.handle_error(e)
     end
 
     class << self
       include ServerMethods
       include RoutingMethods
 
+      # Define 404 handler. Has to return a valid Rack response.
+      def not_found(&block)
+        @not_found_handler = block
+      end
+
+      # Define an unhandled exception handler. Has to return a valid Rack response.
+      def on_error(&block)
+        @error_handler = block
+      end
+      
+      def match(env)
+        super(env) || not_found_handler
+      end
+      
       # Make it runnable via `run MyApp`.
       def call(env)
         @app ||= new
         @app.call(env)
       end
-    end
 
-    protected
+      def handle_error(e)
+        handler = @error_handler || ->(ex) { raise ex }
+        handler.call(e)
+      end
 
-    def not_found
-      @downstream_app || ->(_env) { text(404, 'Not found') }
-    end
+      protected
+      
+      def not_found_handler
+        @downstream_app || @not_found_handler || ->(_env) { text(404, 'Not found') }
+      end
 
-    def text(status, s)
-      [status, { Rack::CONTENT_TYPE => 'text/plain' }, [s]]
+      def text(status, s)
+        [status, { Rack::CONTENT_TYPE => 'text/plain' }, [s]]
+      end
     end
   end
 end
