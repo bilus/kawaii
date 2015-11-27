@@ -44,6 +44,27 @@ module Kawaii
     # Note: Have to generate them individually due to yard limitations.
 
 
+    # Insert routes corresponding to REST actions (similar to Rails `resource`).
+    # @param path [String] path prefix (e.g. "/users/")
+    # @param controller [String] snakecase controller name (e.g. "hello_world"
+    #        corresponds to HelloWorld).
+    # @example REST resource routes
+    #    route '/users/', 'hello_world'
+    # 
+    #    # Will insert routes corresponding to:
+    #    # GET /users/? -> Controller#index
+    #    # GET /users/:id/? -> Controller#show
+    #    # POST /users/? -> Controller#create
+    #    # PATCH /users/:id/? -> Controller#update
+    #    # DELETE /users/:id/? -> Controller#destroy
+    def route(path, controller)
+      get(File.join(path, '?'), "#{controller}#index")
+      get(File.join(path, '/:id/?'), "#{controller}#show")
+      post(File.join(path, '?'), "#{controller}#create")
+      patch(File.join(path, '/:id/?'), "#{controller}#update")
+      delete(File.join(path, '/:id/?'), "#{controller}#destroy")
+    end
+
     # Create a context for route nesting.
     #
     #   @param path [String, Regexp, Matcher] any path specification which can

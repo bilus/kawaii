@@ -66,10 +66,11 @@ The gem is available as open source under the terms of the [MIT License](http://
 + API reference.
 + Check: References to methods defined in contexts and at class scope.
 + Controllers - 'hello_world#index'
-- 'route' to controllers (via class name or symbol references). ASK route '/hello/', HelloWorldController
++ 'route' to controllers (via class name or symbol references).
+- Controllers - render.
 - Readme - description and tutorial.
 - Push gem.
-- Example project using the gem.
+- Example project using the gem and controllers (with views).
 - Rubocop-compliant.
 
 - Rack/custom global middleware.
