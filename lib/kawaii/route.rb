@@ -20,7 +20,6 @@ module Kawaii
     # no match found.
     def match(env)
       match = @matcher.match(env[Rack::PATH_INFO])
-      # puts "Route#match #{@matcher} #{env[Rack::PATH_INFO]} #{match.inspect}"
       RouteHandler.new(self, match.params, &@block) if match
     end
   end

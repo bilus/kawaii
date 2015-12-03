@@ -20,8 +20,8 @@ module Kawaii
 
     # Instances of classes derived from [Kawaii::Base] are Rack applications.
     def call(env)
-      h = self.class.build(env)
-      h.call(env)
+      handler = self.class.build(env)
+      handler.call(env)
     rescue => e
       self.class.handle_error(e)
     end

@@ -113,7 +113,6 @@ module Kawaii
     end
 
     def add_route!(method, route)
-      # puts "add_route! #{method} #{route.inspect}"
       routes[method] << route
     end
   end

@@ -21,7 +21,7 @@ module Kawaii
     # @return {FormatHandler}
     def initialize(route_handler)
       @route_handler = route_handler
-      @matches = []
+      @candidates = []
       @blocks = {}
     end
 
