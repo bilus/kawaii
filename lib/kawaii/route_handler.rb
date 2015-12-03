@@ -9,6 +9,7 @@ module Kawaii
   class RouteHandler
     include MethodChain
     include RenderMethods
+    include FormatMethods
 
     # Params based on request visible in the route handler scope.
     attr_reader :params
@@ -39,7 +40,7 @@ module Kawaii
     class ResponseError < RuntimeError; end
 
     def process_response(response)
-      if response.is_a?(String)
+      if response.is_a?(String) # @todo Use HtmlFormat
         [200,
          { Rack::CONTENT_TYPE => 'text/html',
            Rack::CONTENT_LENGTH => response.size.to_s },
@@ -47,7 +48,7 @@ module Kawaii
       elsif response.is_a?(Array)
         response
       else
-        fail ResponseError, "Unsupported handler aresponse: #{response.inspect}"
+        fail ResponseError, "Unsupported handler response: #{response.inspect}"
       end
     end
   end

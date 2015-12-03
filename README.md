@@ -166,6 +166,27 @@ get '/' do
 end
 ```
 
+### MIME types
+
+You can use `respond_to` in a way similar to Rails in your handlers to match MIME types.
+
+Example:
+
+```ruby
+post '/users' do
+  respond_to do |format|
+    format.json do
+      { foo: 'bar' }
+    end
+    format.html do
+      'Hello, world'
+    end
+  end
+end
+```
+
+**Important:** Content negotiation is currently only based on the `Content-Type` header field of the HTTP request.
+
 ### View templates
 
 View templates must currently be stored in `views/` directory of the project using Kawaii. They can be rendered using the `render` method:
